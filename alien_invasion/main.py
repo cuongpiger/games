@@ -17,17 +17,24 @@ def run_game():
     ship = Ship(ai_settings, screen)
     # Tạo một Group để chứa các bullet
     bullets = Group()
+    # Tạo một Group để chứa các alien
+    aliens = Group()
+
+    # Tạo ra một hàng chứa các alien
+    gf.create_fleet(ai_settings, screen, ship, aliens)
 
     # Bắt đầu main loop của trò chơi
     while True:
-        # Theo dõi các event keyboard và mouse
+        # Theo dõi các event keyboard và mouse 
         gf.check_events(ai_settings, screen, ship, bullets)
 
         ship.update()
-        bullets.update()
+
+        # Update bullets
+        gf.update_bullets(bullets) 
 
         # Vẽ lại screen
-        gf.update_screen(ai_settings, screen, ship, bullets)
+        gf.update_screen(ai_settings, screen, ship, aliens, bullets)
        
 
 
