@@ -8,7 +8,7 @@ from modules.alien import Alien
 
 
 # Theo dõi các event keyboard và mouse
-def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # khi click vào nút đóng của sổ
             sys.exit() # đóng window
@@ -18,9 +18,9 @@ def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y)
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     # Start new game when the player clicks Play
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
 
@@ -29,6 +29,12 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         pygame.mouse.set_visible(False) # ẩn chuột
         stats.reset_stats() # làm mới dữ liệu thống kê
         stats.game_active = True
+
+        # Reset the scoreboard images
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
+        sb.prep_ships()
 
         # Làm mới aliens và bullets
         aliens.empty()
@@ -97,11 +103,18 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
             stats.score += (ai_settings.alien_points * len(aliens))
             sb.prep_score()
 
+        check_high_score(stats, sb)
+
     # Làm mới lại hạm đội nếu bị tiêu diệt hết
     if len(aliens) == 0:
         # Destroy existing bullets and creat new fleet
         bullets.empty()
         ai_settings.increase_speed() # level up
+
+        # Increase level display
+        stats.level += 1
+        sb.prep_level()
+
         create_fleet(ai_settings, screen, ship, aliens) 
 
 
@@ -146,7 +159,7 @@ def get_number_rows(ai_settings, ship_height, alien_height):
 
     return number_rows
 
-def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+def update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # Check if the fleet is at an edge and then update the positions of all aliens in the fleet
     check_fleet_edges(ai_settings, aliens)
     # Update the position of all alines in the fleet 
@@ -156,15 +169,18 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     if pygame.sprite.spritecollideany(ship, aliens): # method này nhận vào 2 tham số, 1 sprite và 1 group, phương thức này sẽ tìm kiếm bất
         # kì member nào của group mà va chạm vs sprite và sẽ dừng tìm kiếm ngay khi phát hiện và trả về alien đầu tiên mà va chạm vs ship
         # , trong trường hợp ko có bất kì va chạm nào thì method này trả về None và khối if này sẽ ko bao h xảy ra
-        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
     # Kiểm tra xem có alien nào dưới màn hình ko
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     if stats.ships_left > 0:
         # Nếu có va chạm trừ mạng đi 1
         stats.ships_left -= 1
+
+        # Update scoreboard
+        sb.prep_ships() 
 
         # Destroy aliens and bullets
         aliens.empty()
@@ -193,11 +209,19 @@ def check_fleet_edges(ai_settings, aliens):
             change_fleet_direction(ai_settings, aliens)
             break
 
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # Check if any aliens have reached the bottom of the screen
     screen_rect = screen.get_rect()
 
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom: # nếu có alien chạm bottom thì ship cũng bị mất đi 1 mạng
-            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets)
             break
+
+def check_high_score(stats, sb):
+    # Check to see if there is a new high score
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
+
+

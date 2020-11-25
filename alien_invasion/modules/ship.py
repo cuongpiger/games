@@ -1,8 +1,10 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship():
+class Ship(Sprite):
     def __init__(self, ai_settings, screen): # tham chiếu đến screen object
+        super().__init__()
         # Tạo ra ship và location bắt đầu của nó
         self.screen = screen
         self.ai_settings = ai_settings
