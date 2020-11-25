@@ -38,3 +38,7 @@ class Ship():
     def blitme(self):
         # Vẽ ship ở vị trí hiện tại của nó lên trên screen
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        # Đặt tàu vào giữa theo chiều ngang
+        self.center = self.screen_rect.centerx

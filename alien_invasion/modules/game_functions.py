@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 
 import pygame
 
@@ -17,7 +18,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 # Vẽ lại màn hình qua mỗi lần lặp
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     screen.fill(ai_settings.bg_color) # tô lại màu nền
 
     # Vẽ lại tất cả các bullet sau ship và aliens
@@ -26,6 +27,10 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
 
     ship.blitme() # vẽ ship
     aliens.draw(screen) # vẽ 1 dòng alien
+
+    # Vẽ ra play_button nếu game is inactive
+    if not stats.game_active:
+        play_button.draw_button()
 
     # Hiển thị screen dc refresh gần đây nhất
     pygame.display.flip()
@@ -46,7 +51,7 @@ def check_keyup_events(event, ship):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
 
-def update_bullets(bullets):
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
     # Update location của những bullet và xóa những bullet cũ
     bullets.update()
 
@@ -54,6 +59,22 @@ def update_bullets(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+
+        
+def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+    # Check for any bullets that have hit aliens, if so => remove this alien and this bullet
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True) # phương thức này sẽ kiểm tra từng bullet và alien có va chạm ko
+        # nếu có thì sẽ trả về 1 dictionary chứa các bullet và alien đã bị va chạm, 2 tham số True True tức cho pygame biết nếu có
+        # va chạm thì xóa 2 đối tượng bullet và alien va chạm này
+
+    # Làm mới lại hạm đội nếu bị tiêu diệt hết
+    if len(aliens) == 0:
+        # Destroy existing bullets and creat new fleet
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens) 
+
 
 def fire_bullet(ai_settings, screen, ship, bullets):
     # Bắn ra một bullet nếu như chưa vượt quá giới hạn số bullet cho 1 lần bắn
@@ -96,3 +117,57 @@ def get_number_rows(ai_settings, ship_height, alien_height):
 
     return number_rows
 
+def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+    # Check if the fleet is at an edge and then update the positions of all aliens in the fleet
+    check_fleet_edges(ai_settings, aliens)
+    # Update the position of all alines in the fleet 
+    aliens.update() # tự dộng gọi cho từng sprite trong group
+
+    # Kiểm tra giữa ship và alien có va chạm ko
+    if pygame.sprite.spritecollideany(ship, aliens): # method này nhận vào 2 tham số, 1 sprite và 1 group, phương thức này sẽ tìm kiếm bất
+        # kì member nào của group mà va chạm vs sprite và sẽ dừng tìm kiếm ngay khi phát hiện và trả về alien đầu tiên mà va chạm vs ship
+        # , trong trường hợp ko có bất kì va chạm nào thì method này trả về None và khối if này sẽ ko bao h xảy ra
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+
+    # Kiểm tra xem có alien nào dưới màn hình ko
+    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+    if stats.ships_left > 0:
+        # Nếu có va chạm trừ mạng đi 1
+        stats.ships_left -= 1
+
+        # Destroy aliens and bullets
+        aliens.empty()
+        bullets.empty()
+
+        # Create a new fleet and center the ship
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
+
+        # Pause 0.5s
+        sleep(0.5)
+    else:
+        stats.game_active = False
+
+def change_fleet_direction(ai_settings, aliens):
+    # Drop the entire fleet and change the fleet's direction
+    for alien in aliens.sprites():
+        alien.rect.y += ai_settings.fleet_drop_speed
+
+    ai_settings.fleet_direction *= -1
+
+def check_fleet_edges(ai_settings, aliens):
+    for alien in aliens.sprites():
+        if alien.check_edges():
+            change_fleet_direction(ai_settings, aliens)
+            break
+
+def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+    # Check if any aliens have reached the bottom of the screen
+    screen_rect = screen.get_rect()
+
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom: # nếu có alien chạm bottom thì ship cũng bị mất đi 1 mạng
+            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            break
