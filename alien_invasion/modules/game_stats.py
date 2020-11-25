@@ -8,3 +8,4 @@ class GameStats():
     def reset_stats(self):
         # Khởi tạo các số liệu thống kê có thể có trong trò chơi
         self.ships_left = self.ai_settings.ship_limit
+        self.score = 0

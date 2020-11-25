@@ -8,7 +8,7 @@ from modules.alien import Alien
 
 
 # Theo dõi các event keyboard và mouse
-def check_events(ai_settings, screen, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT: # khi click vào nút đóng của sổ
             sys.exit() # đóng window
@@ -16,9 +16,31 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP: # nếu bắt dc event thả 1 phím
             check_keyup_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+
+def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+    # Start new game when the player clicks Play
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+
+    if button_clicked and not stats.game_active: # nếu có click vào button play
+        ai_settings.initialize_dynamic_settings() # làm mới trò chơi
+        pygame.mouse.set_visible(False) # ẩn chuột
+        stats.reset_stats() # làm mới dữ liệu thống kê
+        stats.game_active = True
+
+        # Làm mới aliens và bullets
+        aliens.empty()
+        bullets.empty()
+
+        # Tạo ra fleet mới và center the ship
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship() 
+
 
 # Vẽ lại màn hình qua mỗi lần lặp
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     screen.fill(ai_settings.bg_color) # tô lại màu nền
 
     # Vẽ lại tất cả các bullet sau ship và aliens
@@ -26,7 +48,8 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button
         bullet.draw_bullet()
 
     ship.blitme() # vẽ ship
-    aliens.draw(screen) # vẽ 1 dòng alien
+    aliens.draw(screen) # vẽ 1 dòng alien, method này là của Group của pygame, nó sẽ tự vẽ từng phần tử dựa vào `rect`
+    sb.show_score()
 
     # Vẽ ra play_button nếu game is inactive
     if not stats.game_active:
@@ -51,7 +74,7 @@ def check_keyup_events(event, ship):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # Update location của những bullet và xóa những bullet cũ
     bullets.update()
 
@@ -60,19 +83,25 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
-    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
         
-def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # Check for any bullets that have hit aliens, if so => remove this alien and this bullet
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True) # phương thức này sẽ kiểm tra từng bullet và alien có va chạm ko
         # nếu có thì sẽ trả về 1 dictionary chứa các bullet và alien đã bị va chạm, 2 tham số True True tức cho pygame biết nếu có
         # va chạm thì xóa 2 đối tượng bullet và alien va chạm này
 
+    if collisions:
+        for aliens in collisions.values():
+            stats.score += (ai_settings.alien_points * len(aliens))
+            sb.prep_score()
+
     # Làm mới lại hạm đội nếu bị tiêu diệt hết
     if len(aliens) == 0:
         # Destroy existing bullets and creat new fleet
         bullets.empty()
+        ai_settings.increase_speed() # level up
         create_fleet(ai_settings, screen, ship, aliens) 
 
 
@@ -149,6 +178,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         sleep(0.5)
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def change_fleet_direction(ai_settings, aliens):
     # Drop the entire fleet and change the fleet's direction
