@@ -5,6 +5,7 @@ FPS = 60
 
 '''color settings'''
 BLACK = (0, 0, 0)
+RED = (208, 22, 22)
 
 
 
