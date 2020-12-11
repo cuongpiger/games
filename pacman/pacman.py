@@ -10,11 +10,9 @@ class Pacman:
         self.app = app
         self.grid_pos = pos
         self.mouth_closed = False
-        # self.pix_pos = vec(self.grid_pos.x * self.app.cell_width + TOP_BOTTOM_BUFFER//2 + self.app.cell_width//2, self.grid_pos.y * self.app.cell_height + TOP_BOTTOM_BUFFER//2 + self.app.cell_height//2)
-        self.pix_pos = vec(self.grid_pos.x * self.app.cell_width + TOP_BOTTOM_BUFFER//2 + 2, self.grid_pos.y * self.app.cell_height + TOP_BOTTOM_BUFFER//2 + 2)
-        self.direc = 3
-
-        print(self.grid_pos, self.pix_pos) # nhớ xóa
+        self.pix_pos = self.get_pix_pos()
+        self.go = 0
+        self.direction = vec(1, 0)
 
 
     def toggle_mouth(self):
@@ -28,13 +26,23 @@ class Pacman:
         else:
             pygame.draw.arc(self.app.screen, PACMAN_COLOR,
                            (int(self.pix_pos.x), int(self.pix_pos.y), self.app.cell_width - 2, self.app.cell_height - 2),
-                            self.opened_angles[self.direc][0], self.opened_angles[self.direc][1], 60)
+                            self.opened_angles[self.go][0], self.opened_angles[self.go][1], 60)
 
 
     def update(self):
-        pass
+        self.pix_pos += self.direction
 
     
     def draw(self):
         # pygame.draw.circle(self.app.screen, PACMAN_COLOR, (int(self.pix_pos.x), int(self.pix_pos.y)), self.app.cell_width // 2 - 2)
         self.draw_pacman()
+
+    
+    def move(self, direction, go):
+        self.direction = direction
+        self.go = go
+
+
+    def get_pix_pos(self):
+        # self.pix_pos = vec(self.grid_pos.x * self.app.cell_width + TOP_BOTTOM_BUFFER//2 + self.app.cell_width//2, self.grid_pos.y * self.app.cell_height + TOP_BOTTOM_BUFFER//2 + self.app.cell_height//2)
+        return vec(self.grid_pos.x * self.app.cell_width + TOP_BOTTOM_BUFFER//2 + 2, self.grid_pos.y * self.app.cell_height + TOP_BOTTOM_BUFFER//2 + 2)

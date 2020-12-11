@@ -24,6 +24,7 @@ START_FONT = 'arial black'
 
 '''pacman settings'''
 PACMAN_START_POS = vec(1, 1)
+PACMAN_SPEED = 1
 MOUTH_EVENT = USEREVENT + 1
 
 

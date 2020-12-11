@@ -104,11 +104,22 @@ class App:
             if event.type == pygame.QUIT:
                 self.running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.pacman.move(vec(0, -PACMAN_SPEED), 0)
+
+                if event.key == pygame.K_RIGHT:
+                    self.pacman.move(vec(PACMAN_SPEED, 0), 1)
+
+                if event.key == pygame.K_DOWN:
+                    self.pacman.move(vec(0, PACMAN_SPEED), 2)
+
+                if event.key == pygame.K_LEFT:   
+                    self.pacman.move(vec(-PACMAN_SPEED, 0), 3)
                 
 
-
     def playing_update(self):
-        pass
+        self.pacman.update()
 
 
     def playing_draw(self):
