@@ -1,3 +1,5 @@
+from pygame.math import Vector2 as vec
+
 '''screen settings'''
 WIDTH, HEIGHT = 610, 670 # chiều dài và chiều cao của window
 TOP_BOTTOM_BUFFER = 50
@@ -9,6 +11,7 @@ BLACK = (0, 0, 0)
 RED = (208, 22, 22)
 GREY = (107, 107, 107)
 WHITE = (255, 255, 255)
+PACMAN_COLOR = (190, 194, 15)
 
 
 
@@ -18,8 +21,8 @@ COST_TEXT_SIZE = 16
 START_FONT = 'arial black'
 
 
-'''player settings'''
-
+'''pacman settings'''
+PACMAN_START_POS = vec(1, 10)
 
 
 

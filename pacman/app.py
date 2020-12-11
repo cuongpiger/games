@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from settings import *
+from pacman import *
 
 
 pygame.init()
@@ -16,6 +17,7 @@ class App:
         self.state = 'start'
         self.cell_width = MAZE_WIDTH // 28
         self.cell_height = MAZE_HEIGHT // 30
+        self.pacman = Pacman(self, PACMAN_START_POS)
 
         self.load()
 
@@ -109,4 +111,5 @@ class App:
         self.draw_grid()
         self.draw_text('COST: {}'.format('143/372'), self.screen, (5, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         self.draw_text('{}'.format('BFS Algorithm'), self.screen, (WIDTH // 2 + 170, 0), COST_TEXT_SIZE, WHITE, START_FONT)
+        self.pacman.draw() # vẽ pacman
         pygame.display.update()
