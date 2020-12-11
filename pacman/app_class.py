@@ -14,8 +14,8 @@ class App:
         self.clock = pygame.time.Clock()
         self.running = True
         self.state = 'start'
-        self.cell_width = WIDTH // 28
-        self.cell_height = HEIGHT // 30
+        self.cell_width = MAZE_WIDTH // 28
+        self.cell_height = MAZE_HEIGHT // 30
 
         self.load()
 
@@ -53,15 +53,15 @@ class App:
     '''Load cái map lên'''
     def load(self):
         self.background = pygame.image.load('maze.png')
-        self.background = pygame.transform.scale(self.background, (WIDTH, HEIGHT))
+        self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
 
 
     def draw_grid(self):
         for x in range(WIDTH // self.cell_width):
-            pygame.draw.line(self.screen, GREY, (x*self.cell_width, 0), (x*self.cell_width, HEIGHT))
+            pygame.draw.line(self.background, GREY, (x*self.cell_width, 0), (x*self.cell_width, HEIGHT))
 
         for y in range(HEIGHT // self.cell_height):
-            pygame.draw.line(self.screen, GREY, (0, y*self.cell_height), (WIDTH, y*self.cell_height))
+            pygame.draw.line(self.background, GREY, (0, y*self.cell_height), (WIDTH, y*self.cell_height))
 
 
 #############################################  INTRO FUNCTIONS  #############################################
@@ -104,6 +104,9 @@ class App:
 
 
     def playing_draw(self):
-        self.screen.blit(self.background, (0, 0)) # đưa cái maze.png lên màn hình
+        self.screen.fill(BLACK)
+        self.screen.blit(self.background, (TOP_BOTTOM_BUFFER // 2, TOP_BOTTOM_BUFFER // 2)) # đưa cái maze.png lên màn hình
         self.draw_grid()
+        self.draw_text('COST: {}'.format('143/372'), self.screen, (5, 0), COST_TEXT_SIZE, WHITE, START_FONT)
+        self.draw_text('{}'.format('BFS Algorithm'), self.screen, (WIDTH // 2 + 170, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         pygame.display.update()
