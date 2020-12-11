@@ -22,6 +22,8 @@ class App:
         self.load()
 
     def run(self):
+        pygame.time.set_timer(MOUTH_EVENT, 333)
+
         while self.running:
             if self.state == 'start':
                 self.start_events()
@@ -95,6 +97,10 @@ class App:
 
     def playing_events(self):
         for event in pygame.event.get():
+            if event.type == MOUTH_EVENT:
+                self.pacman.toggle_mouth()
+                continue
+
             if event.type == pygame.QUIT:
                 self.running = False
 
@@ -112,4 +118,5 @@ class App:
         self.draw_text('COST: {}'.format('143/372'), self.screen, (5, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         self.draw_text('{}'.format('BFS Algorithm'), self.screen, (WIDTH // 2 + 170, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         self.pacman.draw() # vẽ pacman
+        
         pygame.display.update()

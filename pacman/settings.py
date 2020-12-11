@@ -1,4 +1,5 @@
 from pygame.math import Vector2 as vec
+from pygame import USEREVENT
 
 '''screen settings'''
 WIDTH, HEIGHT = 610, 670 # chiều dài và chiều cao của window
@@ -22,7 +23,8 @@ START_FONT = 'arial black'
 
 
 '''pacman settings'''
-PACMAN_START_POS = vec(1, 10)
+PACMAN_START_POS = vec(1, 1)
+MOUTH_EVENT = USEREVENT + 1
 
 
 
