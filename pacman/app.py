@@ -88,7 +88,6 @@ class App:
 
         self.draw_text('BFS ALGORITHM', self.screen, (WIDTH//2, HEIGHT//2 - 20), START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True) # remind algorithm
         self.draw_text('PUSH SPACE BAR to START', self.screen, (WIDTH//2, HEIGHT//2 + 20), START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True) # nhấn space-bar để tiến hành chạy
-        self.draw_text('High score:', self.screen, (5, 0), START_TEXT_SIZE, (255, 255, 255), START_FONT) # pass
         
         pygame.display.update()
 
