@@ -5,7 +5,7 @@ import numpy as np
 from maze import mazes
 from settings import *
 from pacman import *
-
+from coin import Coin
 
 pygame.init()
 vec = pygame.math.Vector2
@@ -84,9 +84,13 @@ class App:
             pygame.draw.rect(self.background, (112, 55, 163), (int(wall.x*self.cell_width), int(wall.y*self.cell_height), self.cell_width, self.cell_height))
 
     def draw_coins(self):
+        coin_st = CoinSetting()
+
         for coin in self.coins:
             #pygame.draw.rect(self.background, WHITE, (int(coin.x*self.cell_width), int(coin.y*self.cell_height), self.cell_width, self.cell_height))
-            pygame.draw.circle(self.background, WHITE, (int(coin.x*self.cell_width + self.cell_width//2), int(coin.y*self.cell_height + self.cell_height//2)), 2, 0)
+            pygame.draw.circle(self.background, WHITE, (int(coin.x*self.cell_width + self.cell_width//2), int(coin.y*self.cell_height + self.cell_height//2)), 4, 0)
+            # Coin(self.background, (int(coin.x*self.cell_width + self.cell_width//2), int(coin.y*self.cell_height + self.cell_height//2)), coin_st)
+            
 
 #############################################  INTRO FUNCTIONS  #############################################
 

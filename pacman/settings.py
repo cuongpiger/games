@@ -31,3 +31,8 @@ MOUTH_EVENT = USEREVENT + 1
 
 
 '''mob settings'''
+
+class CoinSetting:
+    def __init__(self):
+        self.size = 4 # size of a coin
+        self.color = WHITE
