@@ -61,7 +61,11 @@ class App:
     def load(self):
         self.background = pygame.image.load('maze.png')
         self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
-        self.walls = np.array(mazes[0])
+        
+        tmp = mazes[0]
+        maze = np.array(tmp)
+        walls_pos = np.where(maze == 0)
+        self.walls = [vec(j, i) for i, j in zip(walls_pos[0], walls_pos[1])]
         
 
 
@@ -71,6 +75,9 @@ class App:
 
         for y in range(HEIGHT // self.cell_height):
             pygame.draw.line(self.background, GREY, (0, y*self.cell_height), (WIDTH, y*self.cell_height))
+
+        for wall in self.walls:
+            pygame.draw.rect(self.background, (112, 55, 163), (int(wall.x*self.cell_width), int(wall.y*self.cell_height), self.cell_width, self.cell_height))
 
 
 #############################################  INTRO FUNCTIONS  #############################################
