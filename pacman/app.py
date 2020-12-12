@@ -21,6 +21,7 @@ class App:
         self.cell_height = MAZE_HEIGHT // 30
         self.pacman = Pacman(self, PACMAN_START_POS)
         self.walls = None
+        self.coins = []
 
         self.load()
 
@@ -66,6 +67,9 @@ class App:
         maze = np.array(tmp)
         walls_pos = np.where(maze == 0)
         self.walls = [vec(j, i) for i, j in zip(walls_pos[0], walls_pos[1])]
+
+        coins_pos = np.where(maze > 1)
+        self.coins = [vec(j, i) for i, j in zip(coins_pos[0], coins_pos[1])]
         
 
 
@@ -79,6 +83,10 @@ class App:
         for wall in self.walls:
             pygame.draw.rect(self.background, (112, 55, 163), (int(wall.x*self.cell_width), int(wall.y*self.cell_height), self.cell_width, self.cell_height))
 
+    def draw_coins(self):
+        for coin in self.coins:
+            #pygame.draw.rect(self.background, WHITE, (int(coin.x*self.cell_width), int(coin.y*self.cell_height), self.cell_width, self.cell_height))
+            pygame.draw.circle(self.background, WHITE, (int(coin.x*self.cell_width + self.cell_width//2), int(coin.y*self.cell_height + self.cell_height//2)), 2, 0)
 
 #############################################  INTRO FUNCTIONS  #############################################
 
@@ -137,6 +145,7 @@ class App:
         self.screen.fill(BLACK)
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER // 2, TOP_BOTTOM_BUFFER // 2)) # đưa cái maze.png lên màn hình
         # self.draw_grid()
+        self.draw_coins()
         self.draw_text('COST: {}'.format('143/372'), self.screen, (5, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         self.draw_text('{}'.format('BFS Algorithm'), self.screen, (WIDTH // 2 + 170, 0), COST_TEXT_SIZE, WHITE, START_FONT)
         self.pacman.draw() # vẽ pacman

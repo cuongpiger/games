@@ -87,6 +87,6 @@ class Pacman:
         i, j = int(pos.x), int(pos.y)
 
         if i < 28 and i >= 0 and j < 30 and j >= 0:
-            return self.maze[j][i] == 1
+            return self.maze[j][i] > 0
 
         return False
