@@ -1,7 +1,7 @@
 from modules.ultility_functions import read_json_file
 
 
-class WindowSetting:
+class WindowSettings:
     def __init__(self):
         self.width = 811
         self.height = 355
