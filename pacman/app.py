@@ -1,6 +1,8 @@
 import sys
 
 import pygame
+import numpy as np
+from maze import mazes
 from settings import *
 from pacman import *
 
@@ -18,6 +20,7 @@ class App:
         self.cell_width = MAZE_WIDTH // 28
         self.cell_height = MAZE_HEIGHT // 30
         self.pacman = Pacman(self, PACMAN_START_POS)
+        self.walls = None
 
         self.load()
 
@@ -58,6 +61,8 @@ class App:
     def load(self):
         self.background = pygame.image.load('maze.png')
         self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
+        self.walls = np.array(mazes[0])
+        
 
 
     def draw_grid(self):
