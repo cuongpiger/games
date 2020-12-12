@@ -1,6 +1,7 @@
 from settings import *
 from math import radians
 import pygame
+from maze import mazes
 
 class Pacman:
     closed_angles = radians(0), radians(360)
@@ -14,6 +15,8 @@ class Pacman:
         self.go = 1
         self.direction = vec(1, 0)
         self.stored_direction = None
+        self.able_to_move = True
+        self.maze = mazes[0]
 
 
     def toggle_mouth(self):
@@ -31,16 +34,14 @@ class Pacman:
 
 
     def update(self):
-        self.pix_pos += self.direction # pacman move
-
-
-        if self.time_to_move():
-            if self.stored_direction != None:
-                self.direction = self.stored_direction
+        if self.able_to_move:
+            self.pix_pos += self.direction # pacman move
 
         if self.time_to_move():
             if self.stored_direction != None:
                 self.direction = self.stored_direction
+
+            self.able_to_move = self.can_move()
 
         '''Update new grid position'''
         self.grid_pos[0] = (self.pix_pos[0] - TOP_BOTTOM_BUFFER//2 - 2 + self.app.cell_width//2) // self.app.cell_width
@@ -77,3 +78,15 @@ class Pacman:
         if int(self.pix_pos[1] - TOP_BOTTOM_BUFFER//2 - 1) % self.app.cell_height == 0:
             if self.direction == vec(0, 1) or self.direction == vec(0, -1): # down or up
                 return True
+
+        return False
+
+    
+    def can_move(self):
+        pos = vec(self.grid_pos + self.direction)
+        j, i = int(pos.x), int(pos.y)
+
+        if i < 28 and i >= 0 and j < 30 and j >= 0:
+            return self.maze[i][j] == 1
+
+        return False
