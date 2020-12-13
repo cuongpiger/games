@@ -3,11 +3,11 @@
 
 data = [
     {
-        'name': 'Maze 0',
+        'title': 'Maze 0',
         'path': r'data/images/mazes/maze_0.png'
     },
     {
-        'name': 'Maze 0',
+        'title': 'Maze 0',
         'path': r'data/images/mazes/maze_0.png'
     }
 ]
