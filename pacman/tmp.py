@@ -23,3 +23,13 @@ write_json_file(r'data/text/maze_info.json', data) """
 data = read_json_file(r'data/text/maze_info.json')
 
 print(data) """
+
+################################################################################################
+'''Demo lambda'''
+algos = [{"title": "Breadth First Search", "name": "bfs"}, {"title": "Depth First Search", "name": "dfs"}]
+
+# index = algos.index(filter(lambda item: item.get('name') == 'bfs', algos)[0])
+
+tmp = list(filter(lambda item: item.get('name') == 'bfs', algos))
+
+print(tmp)

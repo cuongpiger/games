@@ -1,4 +1,4 @@
-from modules.ultility_functions import read_json_file
+from modules.utility_functions import read_json_file
 
 
 

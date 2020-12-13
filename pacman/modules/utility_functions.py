@@ -2,6 +2,8 @@ from json import dump, load
 
 from PySide2.QtGui import QPixmap
 
+from modules.maps import maps
+
 
 
 def write_json_file(path, data):
@@ -21,3 +23,5 @@ def load_qpixmap(path):
     return QPixmap(path)
 
 
+def get_map(maze_id):
+    return maps[maze_id].copy()
