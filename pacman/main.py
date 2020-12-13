@@ -1,7 +1,9 @@
-from app import *
+from modules.app import *
+
 
 
 if __name__ == '__main__':
-    app = App()
-    app.run()
- 
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec_()
