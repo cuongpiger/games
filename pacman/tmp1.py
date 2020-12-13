@@ -1,0 +1,1 @@
+print(str(False) == False)

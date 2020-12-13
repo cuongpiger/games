@@ -26,10 +26,24 @@ print(data) """
 
 ################################################################################################
 '''Demo lambda'''
-algos = [{"title": "Breadth First Search", "name": "bfs"}, {"title": "Depth First Search", "name": "dfs"}]
+# algos = [{"title": "Breadth First Search", "name": "bfs"}, {"title": "Depth First Search", "name": "dfs"}]
 
-# index = algos.index(filter(lambda item: item.get('name') == 'bfs', algos)[0])
+# # index = algos.index(filter(lambda item: item.get('name') == 'bfs', algos)[0])
 
-tmp = list(filter(lambda item: item.get('name') == 'bfs', algos))
+# tmp = list(filter(lambda item: item.get('name') == 'bfs', algos))
 
-print(tmp)
+# print(tmp)
+
+
+
+import numpy as np
+
+a = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+pos = np.where(a == 3)
+
+pos = (pos[0][0], pos[1][0])
+print(pos)
