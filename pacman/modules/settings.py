@@ -9,3 +9,4 @@ class WindowSettings:
         self.title = 'Pacman'
         self.icon = r'data/images/pacman.ico'
         self.cb_mazes = read_json_file(r'data/text/maze_info.json')
+        self.cb_algorithms = read_json_file(r'data/text/algorithms_info.json')
