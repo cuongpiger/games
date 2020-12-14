@@ -1,68 +1,60 @@
-from pygame.math import Vector2 as vt
+import numpy as np
 from queue import Queue
-
-from modules.game_state import *
-from modules.utility_functions import hash_function, make_flat, create_ending_state_hvalue, can_move, check_is_ending_state, Pos, MOVE
+from modules.game_state import GameState
+from modules.utility_classes import Pos
+from modules.utility_functions import (
+    init_ending_state_hvalue,
+    check_is_ending_state
+)
 
 
 class Algorithm:
-    def __init__(self, board):
-        self.board = board
-        self.no_rows = board.shape[0]
-        self.no_cols = board.shape[1]
-
+    def __init__(self, start_state):
+        self.start_state = start_state
+        self.no_rows = start_state.state.shape[0]
+        self.no_cols = start_state.state.shape[1]
+        self.ending_state_hvalue = init_ending_state_hvalue(start_state.state)
 
 
     def breadth_first_search(self):
-        arr_state = make_flat(self.board)
-        start_state = GameState(arr_state, -1)
-        ending_state_hvalue = create_ending_state_hvalue(arr_state)
+        start_state = self.start_state
+        states = {}
+        states[start_state.hvalue] = start_state
         queue = Queue()
         queue.put(start_state)
-        path = {}
-        path[start_state.hash_value] = -1 # current game state, previous game state hash value
-        cnt = 1
-        
+
         while not queue.empty():
-            current_state = queue.get() # current state array
+            state = queue.get()
+            
+            if check_is_ending_state(state.state, state.pacman_pos, self.ending_state_hvalue):
+                return np.array(self.get_path(states, state.hvalue))
 
-            if check_is_ending_state(current_state.arr_state, ending_state_hvalue):
-                return self.get_path(path, current_state.hash_value, start_state)
+            for direction in range(4): # top, right, down, left
+                new_pacman_pos = state.pacman_pos.move(direction)
 
-            for direc in range(4):
-                check, future_pacman_pos = can_move(self.board, current_state.pacman_pos, direc, self.no_rows, self.no_cols)
+                if state.can_move(new_pacman_pos):
+                    child_state = GameState(state.state, new_pacman_pos, state.hvalue)
+                    child_state.update(state.pacman_pos, direction)
 
-                if check:
-                    future_state = current_state.arr_state.copy()
-                    future_state[current_state.pacman_pos] = 1
-                    future_state[future_pacman_pos.x * self.no_cols + future_pacman_pos.y] = 3
-                    future_hvalue = hash_function(future_state)
+                    if states.get(child_state.hvalue) == None:
+                        states[child_state.hvalue] = child_state
+                        queue.put(child_state)
 
-                    if path.get(future_hvalue) == None:
-                        new_state = GameState(future_state, current_state.hash_value)
-                        path[future_hvalue] = current_state
-                        queue.put(new_state)
-                        cnt += 1
 
-        print('OKKKKKKKKKKKKKKKKKKKKKKKKK', cnt)
+    def get_path(self, states, last_state_hvalue):
+        path = []
+        key = last_state_hvalue
 
-    
-    def get_path(self, path, last_hvalue, start_state):
-        res = []
-        key = last_hvalue
-        i = 0
+        while True:
+            state = states.get(key)
 
-        while i < 10:
-            obj = path.get(key)
-            res.append(obj)
-
-            if obj.prev_hvalue == -1:
+            if state.prev_hvalue == '':
+                path.append(state)
                 break
-            else:
-                key = obj.prev_hvalue
+            
+            path.append(state)
+            key = state.prev_hvalue
 
-            i += 1
-
-        return res
+        return path[::-1]
 
 
