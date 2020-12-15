@@ -23,8 +23,8 @@ class Game:
 
 
     def get_path_pos(self):
-        x, y = np.where(self.board == gameSt.path)
-        return np.array(list(zip(x, y)))
+        xs, ys = np.where(self.board == gameSt.path)
+        return np.array([Pos(x, y) for x, y in zip(xs, ys)])
 
 
     def create_feed_pos(self):
@@ -36,15 +36,15 @@ class Game:
         pos = self.path[np.random.choice(len(self.path), 1, replace=False)][0]
         
         if len(self.feed_pos) == 1:
-            while self.board[pos[0], pos[1]] == gameSt.feed:
+            while self.board[pos.x, pos.y] == gameSt.feed:
                 pos = self.path[np.random.choice(len(self.path), 1, replace=False)][0]
 
-        return Pos(pos[0], pos[1])
+        return Pos(pos.x, pos.y)
 
 
     def create_feed_on_board(self):
-        x, y = [i for i, _ in self.feed_pos], [j for _, j in self.feed_pos]
-        self.board[x, y] = gameSt.feed
+        xs, ys = [pos.x for pos in self.feed_pos], [pos.y for pos in self.feed_pos]
+        self.board[xs, ys] = gameSt.feed
 
     
     def create_pacman_on_board(self):
