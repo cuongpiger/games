@@ -5,7 +5,7 @@ class GameParameters:
         self.maze_width = maze_width
         self.maze_height = maze_height
         self.algorithm = algorithm
-        self.feed_density = .5
+        self.feed_density = .1
         self.pacman_speed = 1
 
     def update_maze(self, maze_id, maze_img, maze_width, maze_height):

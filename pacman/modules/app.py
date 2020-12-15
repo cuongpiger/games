@@ -8,6 +8,7 @@ from modules.mainwindow import Ui_MainWindow
 from modules.settings import WindowSettings
 from modules.parameters import GameParameters
 from modules.utility_functions import load_qpixmap
+from modules.game_app import GameApp
 from modules.game import Game
 
 
@@ -67,6 +68,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         '''Object to store all parameters of the game'''
         self.game_params = GameParameters(0, windowSt.cb_mazes[0]['path'], first_maze.rect().width(), first_maze.rect().height(), windowSt.cb_algorithms[0]['name']) # a game's infos
+        self.algo_title = windowSt.cb_algorithms[0]['title']
+        self.hue_title = ''
 
 
     def cb_mazes_index_changed(self, idx):
@@ -78,6 +81,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def cb_algorithms_index_changed(self, idx):
         self.game_params.algorithm = windowSt.cb_algorithms[idx]['name']
+        self.algo_title = windowSt.cb_algorithms[idx]['title']
 
 
     def feed_density_value_changed(self, val):
@@ -94,6 +98,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def btn_run_clicked(self):
         game = Game(self.game_params)
+        board = game.board
+        feed_pos = game.feed_pos
+        pacman_pos = game.pacman_pos
+        maze_img = self.game_params.maze_img
+        maze_width = self.game_params.maze_width
+        maze_height = self.game_params.maze_height
 
-        print(self.game_params.algorithm)
+        if self.game_params.algorithm == 'bfs':
+            # path = game.bfs()
+            path = []
+            game_app = GameApp(board, feed_pos, pacman_pos, path, maze_img, maze_width, maze_height, self.algo_title + ',' + self.hue_title)
+            game_app.run()
+
         

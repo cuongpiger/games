@@ -50,6 +50,7 @@ class Game:
     def create_pacman_on_board(self):
         self.board[self.pacman_pos.x, self.pacman_pos.y] = gameSt.pacman
 
+
     def bfs(self):
         start_state = GameState(self.board, self.pacman_pos, '')
         bfs = Algorithm(start_state)

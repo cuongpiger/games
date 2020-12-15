@@ -17,3 +17,4 @@ def get_board(maze_id):
     
 def hash_function(state):
     return hashlib.sha1(state.tobytes()).hexdigest()
+

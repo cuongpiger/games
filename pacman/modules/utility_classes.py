@@ -20,6 +20,9 @@ class Pos:
     def __str__(self):
         return f'({self.x},{self.y})'
 
+    def get(self):
+        return (self.x, self.y)
+
     def move(self, direction):
         if direction == 0: # top
             return Pos(self.x + MOVE[0][0], self.y + MOVE[0][1])
