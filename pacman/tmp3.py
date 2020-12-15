@@ -1,19 +1,17 @@
-import hashlib
 import numpy as np
+import time
 
 
 a = np.matrix([
     [1, 2, 3],
-    [4, 5, 6]
+    [4, 5, 6],
 ])
 
-b = np.matrix([
-    [1, 2, 3],
-    [4, 5, 7]
-])
-# one more time -> different hash code
-hvalue = hashlib.sha1(b.tobytes()).hexdigest()
-print(type(hvalue))  # --> e12b2fe9d64df2661920eb81afb4d3bbd416e0bb
+start_time = time.time()
 
-hvalue = hashlib.sha1(a.tobytes()).hexdigest()
-print(hvalue)  #
+for i in range(1000):
+    check = 6 not in a
+
+print("--- %s seconds ---" % (time.time() - start_time))
+
+# 0.03390884399 (np.any(a == 6))

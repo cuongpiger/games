@@ -14,14 +14,15 @@ class WindowSettings:
         self.height = 355
         self.title = 'Pacman'
         self.icon = r'data/images/pacman.ico'
+        self.feed_density = (0.01, 1.)
         self.cb_mazes = read_json_file(r'data/text/maze_info.json')
         self.cb_algorithms = read_json_file(r'data/text/algorithms_info.json')
 
 
 class GameSettings:
     def __init__(self):
-        self.wall = 5
-        self.path = 6
-        self.pacman = 4
-        self.feed = 7
+        self.wall = 0
+        self.path = 1
+        self.pacman = 2
+        self.feed = 3
         

@@ -33,12 +33,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.cb_algorithms.currentIndexChanged.connect(self.cb_algorithms_index_changed)
 
         '''Settings for slider feed density'''
-        self.sld_feed_density.setRange(10, 100)
+        self.sld_feed_density.setRange(windowSt.feed_density[0]*100, windowSt.feed_density[1]*100)
         self.sld_feed_density.setSingleStep(10)
         self.sld_feed_density.valueChanged.connect(self.feed_density_value_changed)
 
         '''Settings for spinbox feed density'''
-        self.sb_feed_density.setRange(10, 100)
+        self.sb_feed_density.setRange(windowSt.feed_density[0]*100, windowSt.feed_density[1]*100)
         self.sb_feed_density.setSingleStep(10)
         self.sb_feed_density.valueChanged.connect(self.feed_density_value_changed)
 

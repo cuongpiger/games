@@ -14,10 +14,11 @@ class Game:
         self.game_params = game_params
         self.board = np.matrix(get_board(game_params.maze_id))
         self.path = self.get_path_pos()
+
         self.feed_pos = self.create_feed_pos()
-        self.pacman_pos = self.create_pacman_pos()
-        
         self.create_feed_on_board()
+
+        self.pacman_pos = self.create_pacman_pos()
         self.create_pacman_on_board()
 
 
@@ -27,12 +28,17 @@ class Game:
 
 
     def create_feed_pos(self):
-        no_feed = int(round(len(self.path) * self.game_params.feed_density))
+        no_feed = max(int(round(len(self.path) * self.game_params.feed_density)), 1)
         return self.path[np.random.choice(len(self.path), no_feed, replace=False)]
 
 
     def create_pacman_pos(self):
         pos = self.path[np.random.choice(len(self.path), 1, replace=False)][0]
+        
+        if len(self.feed_pos) == 1:
+            while self.board[pos[0], pos[1]] == gameSt.feed:
+                pos = self.path[np.random.choice(len(self.path), 1, replace=False)][0]
+
         return Pos(pos[0], pos[1])
 
 
@@ -47,11 +53,8 @@ class Game:
     def bfs(self):
         start_state = GameState(self.board, self.pacman_pos, '')
         bfs = Algorithm(start_state)
-        path = bfs.breadth_first_search()
-
-        for obj in path:
-            print(obj.state)
-            print('_________________')
+        path = bfs.bfs_on_board()
+        bfs.print_path(path)
     
 
 

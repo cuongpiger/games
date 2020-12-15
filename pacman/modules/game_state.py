@@ -29,7 +29,29 @@ class GameState():
 
         return self.state[new_pacman_pos.x, new_pacman_pos.y] != gameSt.wall
 
-    def update(self, old_pacman_pos, pacman_direction):
+    def update(self, old_pacman_pos):
         self.state[old_pacman_pos.x, old_pacman_pos.y] = gameSt.path
-        self.state[self.pacman_pos.x, self.pacman_pos.y] = pacman_direction
+        self.state[self.pacman_pos.x, self.pacman_pos.y] = gameSt.pacman
         self.hvalue = hash_function(self.state)
+
+    def get_one_food_pos(self):
+        no_rows, no_cols = self.state.shape
+        radius = max(no_rows, no_cols)
+
+        for r in range(1, radius + 1):
+            xdown, xtop = max(self.pacman_pos.x - r, 0), min(self.pacman_pos.x + r + 1, no_rows)
+            ydown, ytop = max(self.pacman_pos.y - r, 0), min(self.pacman_pos.y + r + 1, no_cols)
+
+            for x in range(xdown, xtop):
+                for y in range(ydown, ytop):
+                    pos = Pos(x, y)
+                    
+                    if self.state[pos.x, pos.y] == gameSt.feed:
+                        return pos
+
+        return None
+            
+
+        pos = np.where(self.state == gameSt.feed)
+        
+        return Pos(pos[0][0], pos[1][0])

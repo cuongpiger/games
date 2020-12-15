@@ -1,11 +1,15 @@
 import numpy as np
 from queue import Queue
 from modules.game_state import GameState
+from modules.settings import GameSettings
 from modules.utility_classes import Pos
 from modules.utility_functions import (
     init_ending_state_hvalue,
     check_is_ending_state
 )
+
+
+gameSt = GameSettings()
 
 
 class Algorithm:
@@ -16,7 +20,7 @@ class Algorithm:
         self.ending_state_hvalue = init_ending_state_hvalue(start_state.state)
 
 
-    def breadth_first_search(self):
+    def breadth_first_search_v1(self):
         start_state = self.start_state
         states = {}
         states[start_state.hvalue] = start_state
@@ -41,6 +45,30 @@ class Algorithm:
                         queue.put(child_state)
 
 
+    def breadth_first_search(self, start_state, ending_pos):
+        states = {}
+        states[start_state.hvalue] = start_state
+        queue = Queue()
+        queue.put(start_state)
+
+        while not queue.empty():
+            state = queue.get()
+
+            if state.pacman_pos == ending_pos:
+                return state, self.get_path(states, state.hvalue)
+
+            for direction in range(4):
+                new_pacman_pos = state.pacman_pos.move(direction)
+
+                if state.can_move(new_pacman_pos):
+                    child_state = GameState(state.state, new_pacman_pos, state.hvalue)
+                    child_state.update(state.pacman_pos)
+
+                    if states.get(child_state.hvalue) == None:
+                        states[child_state.hvalue] = child_state
+                        queue.put(child_state)
+
+
     def get_path(self, states, last_state_hvalue):
         path = []
         key = last_state_hvalue
@@ -49,12 +77,45 @@ class Algorithm:
             state = states.get(key)
 
             if state.prev_hvalue == '':
-                path.append(state)
+                path.append(state.state)
                 break
             
-            path.append(state)
+            path.append(state.state)
             key = state.prev_hvalue
 
-        return path[::-1]
+        return np.array(path[::-1])
+
+
+    def bfs_on_board(self):
+        state = self.start_state
+        path = []
+        feed_pos = state.get_one_food_pos()
+
+        while feed_pos is not None:
+            new_state, new_path = self.breadth_first_search(state, feed_pos)
+
+            state = new_state
+            state.prev_hvalue = ''
+
+            path.append(new_path)
+            feed_pos = state.get_one_food_pos()
+
+        return path
+
+        
+    def print_path(self, path):
+        print(self.start_state.state)
+        print()
+
+        for states in path:
+            for i in range(1, len(states)):
+                print(states[i])
+                print()
+            print('-----------------------------------------')
+
+            
+
+
+
 
 
