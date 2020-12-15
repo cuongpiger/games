@@ -18,31 +18,7 @@ class Algorithm:
         self.no_rows = start_state.state.shape[0]
         self.no_cols = start_state.state.shape[1]
         self.ending_state_hvalue = init_ending_state_hvalue(start_state.state)
-
-
-    def breadth_first_search_v1(self):
-        start_state = self.start_state
-        states = {}
-        states[start_state.hvalue] = start_state
-        queue = Queue()
-        queue.put(start_state)
-
-        while not queue.empty():
-            state = queue.get()
-            
-            if check_is_ending_state(state.state, state.pacman_pos, self.ending_state_hvalue):
-                return np.array(self.get_path(states, state.hvalue))
-
-            for direction in range(4): # top, right, down, left
-                new_pacman_pos = state.pacman_pos.move(direction)
-
-                if state.can_move(new_pacman_pos):
-                    child_state = GameState(state.state, new_pacman_pos, state.hvalue)
-                    child_state.update(state.pacman_pos, direction)
-
-                    if states.get(child_state.hvalue) == None:
-                        states[child_state.hvalue] = child_state
-                        queue.put(child_state)
+        self.path = None
 
 
     def breadth_first_search(self, start_state, ending_pos):
@@ -77,10 +53,10 @@ class Algorithm:
             state = states.get(key)
 
             if state.prev_hvalue == '':
-                path.append(state.state)
+                path.append(state)
                 break
             
-            path.append(state.state)
+            path.append(state)
             key = state.prev_hvalue
 
         return np.array(path[::-1])
@@ -100,18 +76,32 @@ class Algorithm:
             path.append(new_path)
             feed_pos = state.get_one_food_pos()
 
-        return path
+        self.format_path(path)
 
+
+    def format_path(self, path):
+        res = [self.start_state]
         
-    def print_path(self, path):
-        print(self.start_state.state)
-        print()
-
         for states in path:
             for i in range(1, len(states)):
-                print(states[i])
-                print()
-            print('-----------------------------------------')
+                res.append(states[i])
+
+        self.path = np.array(res)
+
+    
+    def get_moves(self):
+        moves = []
+
+        for i in range(1, len(self.path)):
+            pos = self.path[i].pacman_pos - self.path[i-1].pacman_pos
+            moves.append(pos)
+
+        return np.array(moves)
+
+
+    def print_path(self):
+        for state in self.path:
+            print(state.state, '\n')
 
             
 

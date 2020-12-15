@@ -50,8 +50,3 @@ class GameState():
                         return pos
 
         return None
-            
-
-        pos = np.where(self.state == gameSt.feed)
-        
-        return Pos(pos[0][0], pos[1][0])
