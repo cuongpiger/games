@@ -3,10 +3,6 @@ from queue import Queue
 from modules.game_state import GameState
 from modules.settings import GameSettings
 from modules.utility_classes import Pos
-from modules.utility_functions import (
-    init_ending_state_hvalue,
-    check_is_ending_state
-)
 
 
 gameSt = GameSettings()
@@ -17,7 +13,6 @@ class Algorithm:
         self.start_state = start_state
         self.no_rows = start_state.state.shape[0]
         self.no_cols = start_state.state.shape[1]
-        self.ending_state_hvalue = init_ending_state_hvalue(start_state.state)
         self.path = None
 
 

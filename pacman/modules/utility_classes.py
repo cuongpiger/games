@@ -14,9 +14,6 @@ class Pos:
     def __sub__(self, other):
         return Pos(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other):
-        return Pos(self.x * other, self.y * other)
-
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 

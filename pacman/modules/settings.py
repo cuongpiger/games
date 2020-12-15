@@ -8,6 +8,7 @@ def read_json_file(path):
     except:
         return None
 
+
 class WindowSettings:
     def __init__(self):
         self.width = 811
@@ -15,6 +16,7 @@ class WindowSettings:
         self.title = 'Pacman'
         self.icon = r'data/images/pacman.ico'
         self.feed_density = (0.01, 1.)
+        self.pacman_speed = (1, 5)
         self.cb_mazes = read_json_file(r'data/text/maze_info.json')
         self.cb_algorithms = read_json_file(r'data/text/algorithms_info.json')
 

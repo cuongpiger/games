@@ -43,12 +43,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sb_feed_density.valueChanged.connect(self.feed_density_value_changed)
 
         '''Settings for slider pacman's feed'''
-        self.sld_pacman_speed.setRange(1, 5)
+        self.sld_pacman_speed.setRange(windowSt.feed_density[0], windowSt.feed_density[1])
         self.sld_pacman_speed.setSingleStep(1)
         self.sld_pacman_speed.valueChanged.connect(self.pacman_speed_value_changed)
 
         '''Settings for spinbox pacman's feed'''
-        self.sb_pacman_speed.setRange(1, 5)
+        self.sb_pacman_speed.setRange(windowSt.feed_density[0], windowSt.feed_density[1])
         self.sb_pacman_speed.setSingleStep(1)
         self.sb_pacman_speed.valueChanged.connect(self.pacman_speed_value_changed)
 
@@ -94,4 +94,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     def btn_run_clicked(self):
         game = Game(self.game_params)
+
+        print(self.game_params.algorithm)
         
