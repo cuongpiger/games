@@ -23,6 +23,9 @@ class Pos:
     def get(self):
         return (self.x, self.y)
 
+    def swap(self):
+        return Pos(self.y, self.x)
+
     def move(self, direction):
         if direction == 0: # top
             return Pos(self.x + MOVE[0][0], self.y + MOVE[0][1])

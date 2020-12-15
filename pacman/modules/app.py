@@ -1,8 +1,8 @@
 import sys
 
 from PySide2.QtCore import Qt
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtGui import QIcon, QKeySequence
+from PySide2.QtWidgets import QApplication, QMainWindow, QShortcut
 
 from modules.mainwindow import Ui_MainWindow
 from modules.settings import WindowSettings
@@ -58,6 +58,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         '''Settings for button run'''
         self.btn_run.clicked.connect(self.btn_run_clicked)
+        self.btn_run_shortcut = QShortcut(QKeySequence('Return'), self)
+        self.btn_run_shortcut.activated.connect(self.btn_run_clicked)
 
         '''Settings for main window'''
         self.setWindowIcon(QIcon(windowSt.icon))

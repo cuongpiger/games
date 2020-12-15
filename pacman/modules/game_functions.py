@@ -3,6 +3,8 @@ import pygame
 
 from modules.settings import GameSettings, ColorSettings, FontSettings, WindowSettings
 from modules.utility_classes import Pos
+from modules.pacman import Pacman
+from modules.feed import Feed
 
 
 gameSt = GameSettings()
@@ -10,9 +12,12 @@ colorSt = ColorSettings()
 fontSt = FontSettings()
 
 
-def check_events(stats):
+def check_events(pacman, stats):
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: # click vào button close window trên title bar
+        if event.type == pygame.USEREVENT + 1:
+            pacman.toggle_mouth()
+        elif event.type == pygame.QUIT: # click vào button close window trên title bar
+            # pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(stats, event)
@@ -33,9 +38,23 @@ def intro_draw(screen, title, width, height):
     draw_text(screen, 'push SPACE BAR to START', fontSt.FONT_ARIAL_BLACK, fontSt.SIZE_18, colorSt.DARK_BLUE, Pos(width//2, height//2 + 20))
 
 
-def update_screen(screen):
+def background_draw(screen, background, feed, pacman):
+    screen.blit(background, (gameSt.cell, gameSt.cell))
+    feed.draw(screen)
+    pacman.blit(0)
 
-    pygame.display.flip()
+
+def feed_draw(screen, feed, feed_pos):
+    for pos in feed_pos:
+        food = Feed(screen, pos.swap())
+        feed.add(food)
+
+
+def update_feed(screen, pacman, feed):
+    pass
+
+
+    
 
 ###################################################################################################### utility functions down
 

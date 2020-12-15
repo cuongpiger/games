@@ -1,19 +1,21 @@
+import pygame
 from json import load
 
+CELL = 30
 
 def read_json_file(path):
+
     try:
         with open(path) as reader:
             return load(reader)
     except:
         return None
 
-
 class WindowSettings:
     def __init__(self):
         self.width = 811
         self.height = 355
-        self.padding = 50
+        self.padding = CELL
         self.title = 'Pacman'
         self.icon = r'data/images/pacman.ico'
         self.feed_density = (0.01, 1.)
@@ -28,7 +30,10 @@ class GameSettings:
         self.path = 1
         self.pacman = 2
         self.feed = 3
-        self.cell = 30
+        self.cell = CELL
+        self.feed_img = pygame.transform.scale(pygame.image.load(r'data/images/feed.png'), (self.cell, self.cell))
+        self.pacman_img = [pygame.transform.scale(pygame.image.load(r'data/images/pacman_close.png'), (self.cell, self.cell)), 
+                           pygame.transform.scale(pygame.image.load(r'data/images/pacman_open.png'), (self.cell, self.cell))]
         
 
 class ColorSettings:
