@@ -41,8 +41,10 @@ class Pacman(Sprite):
     def check_move(self, direc_pos):
         new_pacman_pos = (self.pacman_pos + direc_pos).swap()
         future_location = Location(new_pacman_pos.x*gameSt.cell + gameSt.cell, new_pacman_pos.y*gameSt.cell + gameSt.cell)
+        # future_pos = Pos((self.rect.x - gameSt.cell)//gameSt.cell, (self.rect.y - gameSt.cell)//gameSt.cell)
 
         if future_location == Location(self.rect.x, self.rect.y):
+        # if future_pos == new_pacman_pos:
             self.pacman_pos = new_pacman_pos.swap()
             return True
 

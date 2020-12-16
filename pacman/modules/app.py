@@ -5,7 +5,7 @@ from PySide2.QtGui import QIcon, QKeySequence
 from PySide2.QtWidgets import QApplication, QMainWindow, QShortcut
 
 from modules.mainwindow import Ui_MainWindow
-from modules.settings import WindowSettings
+from modules.settings import WindowSettings, GameSettings
 from modules.parameters import GameParameters
 from modules.utility_functions import load_qpixmap
 from modules.game_app import GameApp
@@ -14,6 +14,7 @@ from modules.game import Game
 
 
 windowSt = WindowSettings()
+gameSt = GameSettings()
 
 
 
@@ -43,13 +44,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sb_feed_density.setSingleStep(10)
         self.sb_feed_density.valueChanged.connect(self.feed_density_value_changed)
 
-        '''Settings for slider pacman's feed'''
-        self.sld_pacman_speed.setRange(windowSt.feed_density[0], windowSt.feed_density[1])
+        '''Settings for slider pacman's speed'''
+        self.sld_pacman_speed.setRange(windowSt.pacman_speed[0], windowSt.pacman_speed[1])
         self.sld_pacman_speed.setSingleStep(1)
         self.sld_pacman_speed.valueChanged.connect(self.pacman_speed_value_changed)
 
-        '''Settings for spinbox pacman's feed'''
-        self.sb_pacman_speed.setRange(windowSt.feed_density[0], windowSt.feed_density[1])
+        '''Settings for spinbox pacman's speed'''
+        self.sb_pacman_speed.setRange(windowSt.pacman_speed[0], windowSt.pacman_speed[1])
         self.sb_pacman_speed.setSingleStep(1)
         self.sb_pacman_speed.valueChanged.connect(self.pacman_speed_value_changed)
 
@@ -106,10 +107,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         maze_img = self.game_params.maze_img
         maze_width = self.game_params.maze_width
         maze_height = self.game_params.maze_height
+        # pacman_speed = 0.2*(self.game_params.pacman_speed - 1) + gameSt.speed
+        pacman_speed = 1.0
+
+
+        # 
 
         if self.game_params.algorithm == 'bfs':
             path = game.bfs()
-            game_app = GameApp(board, feed_pos, pacman_pos, path, maze_img, maze_width, maze_height, self.algo_title + ',' + self.hue_title)
+            game_app = GameApp(board, feed_pos, pacman_pos, pacman_speed, path, maze_img, maze_width, maze_height, self.algo_title + ',' + self.hue_title)
             game_app.run()
 
         

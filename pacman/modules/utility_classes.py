@@ -53,7 +53,10 @@ class Location:
 
     def move(self, pos, speed):
         if pos.x != 0:
-            return Location((self.x + pos.x)*speed, self.y)
+            return Location(self.x + float(pos.x)*speed, self.y)
         else:
-            return Location(self.x, (self.y + pos.y)*speed)
+            return Location(self.x, self.y + float(pos.y)*speed)
+
+    def swap(self):
+        return Location(self.y, self.x)
 

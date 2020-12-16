@@ -11,7 +11,7 @@ import modules.game_functions as gf
 windowSt = WindowSettings()
 
 class GameApp:
-    def __init__(self, board, feed_pos, pacman_pos, path, maze_img, maze_width, maze_height, title):
+    def __init__(self, board, feed_pos, pacman_pos, pacman_speed, path, maze_img, maze_width, maze_height, title):
         self.board = board
         self.feed_pos = feed_pos
         self.path = path + [Pos(0, 0)] # cái đường đi của bfs
@@ -22,16 +22,16 @@ class GameApp:
         self.stats = GameStats(len(path) - 1)
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.pacman = Pacman(self.screen, pacman_pos.swap())
-        self.speed = 1.0
+        self.speed = pacman_speed
         self.feed = Group()
         self.clock = pygame.time.Clock()
 
-        pygame.init()
         pygame.display.set_icon(pygame.image.load(windowSt.icon))
         pygame.display.set_caption(windowSt.title)
 
 
     def run(self):
+        pygame.init()
         pygame.time.set_timer(pygame.USEREVENT + 1, 333)
 
         direc_pos = self.path.pop(0)
@@ -40,10 +40,10 @@ class GameApp:
         gf.feed_draw(self.screen, self.feed, self.feed_pos)
 
         while True:
-            gf.check_events(self.pacman, self.stats)
+            gf.check_events(self.path, self.pacman, self.stats)
 
             if self.stats.game_active == 1:
-                flag = gf.screen_draw(self.screen, self.background, self.feed, self.pacman, self.speed, direc_pos, cnt_cost, self.stats.cost)
+                flag = gf.screen_draw(self.screen, self.width, self.height, self.background, self.feed, self.pacman, self.speed, direc_pos, cnt_cost, self.stats.cost)
 
                 if flag == True:
                     direc_pos = self.path.pop(0)
