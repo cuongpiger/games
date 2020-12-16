@@ -17,8 +17,7 @@ def check_events(pacman, stats):
         if event.type == pygame.USEREVENT + 1:
             pacman.toggle_mouth()
         elif event.type == pygame.QUIT: # click vào button close window trên title bar
-            # pygame.quit()
-            sys.exit()
+            stats.game_active = 2
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(stats, event)
 
@@ -38,11 +37,14 @@ def intro_draw(screen, title, width, height):
     draw_text(screen, 'push SPACE BAR to START', fontSt.FONT_ARIAL_BLACK, fontSt.SIZE_18, colorSt.DARK_BLUE, Pos(width//2, height//2 + 20))
 
 
-def screen_draw(screen, background, feed, pacman, speed, direc_pos):
+def screen_draw(screen, background, feed, pacman, speed, direc_pos, cost, total_cost):
+    screen.fill(colorSt.GREY)
     screen.blit(background, (gameSt.cell, gameSt.cell))
     pacman.update(direc_pos, speed)
+    update_feed(screen, feed, pacman)
     feed.draw(screen)
     pacman.blit(direc_pos.get_angel())
+    draw_text(screen, 'COST: {}/{}'.format(cost, total_cost), fontSt.FONT_ARIAL_BLACK, fontSt.SIZE_18, colorSt.WHITE, Pos(5, 2), 'left')
 
     return pacman.check_move(direc_pos)
 
@@ -53,8 +55,11 @@ def feed_draw(screen, feed, feed_pos):
         feed.add(food)
 
 
-def update_feed(screen, pacman, feed):
-    pass
+def update_feed(screen, feed, pacman):
+    food = pygame.sprite.spritecollideany(pacman, feed)
+
+    if food:
+        feed.remove(food)
 
 
     
@@ -68,6 +73,8 @@ def draw_text(screen, content, font_name, size, color, pos, align='center'):
 
     if align == 'center':
         pos = (pos.x - text_size[0]//2, pos.y - text_size[1]//2)
+    elif align == 'left':
+        pos = (pos.x, pos.y)
 
     screen.blit(text, pos)
 

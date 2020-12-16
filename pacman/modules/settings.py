@@ -42,9 +42,11 @@ class ColorSettings:
     ORANGE = (156, 118, 54)
     DARK_BLUE = (36, 112, 117)
     GREY = (57, 64, 64)
+    WHITE = (255, 255, 255)
 
 class FontSettings:
     SIZE_24 = 24
+    SIZE_20 = 20
     SIZE_16 = 16
     SIZE_18 = 18
     FONT_ARIAL_BLACK = 'arial black'
