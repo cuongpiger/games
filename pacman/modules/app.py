@@ -107,11 +107,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         maze_img = self.game_params.maze_img
         maze_width = self.game_params.maze_width
         maze_height = self.game_params.maze_height
-        # pacman_speed = 0.2*(self.game_params.pacman_speed - 1) + gameSt.speed
-        pacman_speed = 1.0
-
-
-        # 
+        pacman_speed = self.game_params.pacman_speed
 
         if self.game_params.algorithm == 'bfs':
             path = game.bfs()

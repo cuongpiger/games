@@ -41,11 +41,27 @@ class Pacman(Sprite):
     def check_move(self, direc_pos):
         new_pacman_pos = (self.pacman_pos + direc_pos).swap()
         future_location = Location(new_pacman_pos.x*gameSt.cell + gameSt.cell, new_pacman_pos.y*gameSt.cell + gameSt.cell)
-        # future_pos = Pos((self.rect.x - gameSt.cell)//gameSt.cell, (self.rect.y - gameSt.cell)//gameSt.cell)
 
-        if future_location == Location(self.rect.x, self.rect.y):
-        # if future_pos == new_pacman_pos:
+        if self.check_move_hit(new_pacman_pos.swap(), direc_pos):
             self.pacman_pos = new_pacman_pos.swap()
             return True
 
         return False
+
+    def check_move_hit(self, new_pacman_pos, direc_pos):
+        hor_bar = new_pacman_pos.x*gameSt.cell + gameSt.cell
+        ver_bar = new_pacman_pos.y*gameSt.cell + gameSt.cell
+
+        if direc_pos.x < 0 and self.rect.top <= hor_bar: # go top
+            return True
+        elif direc_pos.x > 0 and self.rect.top >= hor_bar: # go bottom
+            return True
+        elif direc_pos.y < 0 and self.rect.left <= ver_bar: # go left
+            return True
+        elif direc_pos.y > 0 and self.rect.left >= ver_bar: # go right
+            return True
+
+        return False
+
+            
+
