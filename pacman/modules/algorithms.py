@@ -91,7 +91,7 @@ class Algorithm:
             pos = self.path[i].pacman_pos - self.path[i-1].pacman_pos
             moves.append(pos)
 
-        return np.array(moves)
+        return moves
 
 
     def print_path(self):

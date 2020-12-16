@@ -108,8 +108,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         maze_height = self.game_params.maze_height
 
         if self.game_params.algorithm == 'bfs':
-            # path = game.bfs()
-            path = []
+            path = game.bfs()
             game_app = GameApp(board, feed_pos, pacman_pos, path, maze_img, maze_width, maze_height, self.algo_title + ',' + self.hue_title)
             game_app.run()
 

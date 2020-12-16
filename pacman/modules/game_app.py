@@ -14,7 +14,7 @@ class GameApp:
     def __init__(self, board, feed_pos, pacman_pos, path, maze_img, maze_width, maze_height, title):
         self.board = board
         self.feed_pos = feed_pos
-        self.path = path # cái đường đi của bfs
+        self.path = path + [Pos(0, 0)] # cái đường đi của bfs
         self.background = pygame.transform.scale(pygame.image.load(maze_img), (maze_width, maze_height))
         self.width = maze_width + 2*windowSt.padding
         self.height = maze_height + 2*windowSt.padding
@@ -22,6 +22,7 @@ class GameApp:
         self.stats = GameStats(len(path))
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.pacman = Pacman(self.screen, pacman_pos.swap())
+        self.speed = 1.0
         self.feed = Group()
         self.clock = pygame.time.Clock()
 
@@ -33,15 +34,22 @@ class GameApp:
         pygame.init()
         pygame.time.set_timer(pygame.USEREVENT + 1, 333)
 
+        direc_pos = self.path.pop(0)
+
         gf.feed_draw(self.screen, self.feed, self.feed_pos)
 
-        while True:
+        while True and self.path:
             gf.check_events(self.pacman, self.stats)
 
-            if self.stats.game_active:
-                gf.background_draw(self.screen, self.background, self.feed, self.pacman)
-            else:
+            if self.stats.game_active == 1:
+                flag = gf.screen_draw(self.screen, self.background, self.feed, self.pacman, self.speed, direc_pos)
+
+                if flag == True:
+                    direc_pos = self.path.pop(0)
+            elif self.stats.game_active == -1:
                 gf.intro_draw(self.screen, self.title, self.width, self.height)
 
             pygame.display.flip()
             self.clock.tick(60)
+
+        pygame.quit()

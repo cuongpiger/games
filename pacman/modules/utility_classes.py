@@ -35,3 +35,25 @@ class Pos:
             return Pos(self.x + MOVE[2][0], self.y + MOVE[2][1])
         else: # left
             return Pos(self.x + MOVE[3][0], self.y + MOVE[3][1])
+
+    def get_angel(self):
+        if self.x == 0:
+            return 0 if self.y > 0 else 180
+        else:
+            return 270 if self.x > 0 else 90
+
+
+class Location:
+    def __init__(self, x, y):
+        self.x = float(x)
+        self.y = float(y)
+
+    def __eq__(self, other):
+        return (int(self.x) == int(other.x)) and (int(self.y) == int(other.y))
+
+    def move(self, pos, speed):
+        if pos.x != 0:
+            return Location((self.x + pos.x)*speed, self.y)
+        else:
+            return Location(self.x, (self.y + pos.y)*speed)
+

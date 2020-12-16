@@ -29,6 +29,7 @@ class GameSettings:
         self.wall = 0
         self.path = 1
         self.pacman = 2
+        self.speed = 1.0
         self.feed = 3
         self.cell = CELL
         self.feed_img = pygame.transform.scale(pygame.image.load(r'data/images/feed.png'), (self.cell, self.cell))

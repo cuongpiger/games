@@ -55,7 +55,6 @@ class Game:
         start_state = GameState(self.board, self.pacman_pos, '')
         bfs = Algorithm(start_state)
         bfs.bfs_on_board()
-        # bfs.print_path()
 
         return bfs.get_moves()
     

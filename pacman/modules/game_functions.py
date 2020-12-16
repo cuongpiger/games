@@ -38,10 +38,13 @@ def intro_draw(screen, title, width, height):
     draw_text(screen, 'push SPACE BAR to START', fontSt.FONT_ARIAL_BLACK, fontSt.SIZE_18, colorSt.DARK_BLUE, Pos(width//2, height//2 + 20))
 
 
-def background_draw(screen, background, feed, pacman):
+def screen_draw(screen, background, feed, pacman, speed, direc_pos):
     screen.blit(background, (gameSt.cell, gameSt.cell))
+    pacman.update(direc_pos, speed)
     feed.draw(screen)
-    pacman.blit(0)
+    pacman.blit(direc_pos.get_angel())
+
+    return pacman.check_move(direc_pos)
 
 
 def feed_draw(screen, feed, feed_pos):
@@ -70,5 +73,8 @@ def draw_text(screen, content, font_name, size, color, pos, align='center'):
 
 
 def check_keydown_events(stats, event):
-    if event.key == pygame.K_SPACE and not stats.game_active:
-        stats.game_active = True
+    if event.key == pygame.K_SPACE:
+        if stats.game_active <= 0:
+            stats.game_active = 1
+        elif stats.game_active == 1:
+            stats.game_active = 0
