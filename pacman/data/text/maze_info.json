@@ -1,1 +1,12 @@
-[{"title": "Maze 0", "path": "data/images/mazes/maze_0.png"}, {"title": "Maze 1", "path": "data/images/mazes/maze_1.png"}]
+[
+    {"title": "Maze 0", "path": "data/images/mazes/maze_0.png"}, 
+    {"title": "Maze 1", "path": "data/images/mazes/maze_1.png"},
+    {"title": "Maze 2", "path": "data/images/mazes/maze_2.png"},
+    {"title": "Maze 3", "path": "data/images/mazes/maze_3.png"},
+    {"title": "Maze 4", "path": "data/images/mazes/maze_4.png"},
+    {"title": "Maze 5", "path": "data/images/mazes/maze_5.png"},
+    {"title": "Maze 6", "path": "data/images/mazes/maze_6.png"},
+    {"title": "Maze 7", "path": "data/images/mazes/maze_7.png"},
+    {"title": "Maze 8", "path": "data/images/mazes/maze_8.png"},
+    {"title": "Maze 9", "path": "data/images/mazes/maze_9.png"}
+]
