@@ -1,6 +1,6 @@
 from modules.util_functions import hashFunction
 from modules.settings import PACMAN, PATH, FOOD, WALL
-from modules.algorithm import bfs
+from modules.algorithm import Algorithm
 from queue import Queue
 import numpy as np
 
@@ -11,38 +11,53 @@ class Handler:
         self.algorithm = algorithm
         self.heuristic = heuristic
     
-    def findClosestFood(self):
+    def findClosestFood(self, maze, pacman_coor):
         queue = Queue()
-        queue.put(self.pacman_coor)
-        visited = np.zeros(self.maze.shape, dtype=bool)
-        visited[self.pacman_coor.get()] = True
+        queue.put(pacman_coor)
+        visited = {pacman_coor.get(): True}
         
         while not queue.empty():
             u = queue.get()
+        
+            if maze[u.get()] == FOOD:
+                return u
             
             for direc in range(4):
                 v = u.move(direc)
                 
-                if self.maze[u.get()] == FOOD:
-                    return u
-                
-                if v < self.maze.shape and self.maze[v.get()] != WALL:
+                if v < maze.shape and maze[v.get()] != WALL and visited.get(v.get()) == None:
                     queue.put(v)
                     visited[v.get()] = True
                     
         return None
+    
+    def getPath(self, lst_paths):
+        res = [self.pacman_coor.get()]
         
-        
-        
+        for path in lst_paths:
+            res += path[1:]
+            
+        return res
+    
+    def updateMaze(self, maze, source, path):
+        maze[source.get()] = PATH
+        for coor in path:
+            maze[coor] = PATH
+            
     def solve(self):
-        total_food = np.sum(self.maze == FOOD)
-        cur_food = 0
-        state = self.maze
+        maze = self.maze.copy()
         source = self.pacman_coor
-        target = self.pacman_coor
+        target = self.findClosestFood(maze, source)
+        lst_paths = []
         
         if not self.heuristic:
             while target is not None:
-                target = self.findClosestFood()
+                path = getattr(Algorithm(maze, source, target), self.algorithm)()
+                self.updateMaze(maze, source, path)
+                lst_paths.append(path)
+                source = target
+                target = self.findClosestFood(maze, source)
+                
+        return self.getPath(lst_paths)
         
         

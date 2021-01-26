@@ -38,13 +38,11 @@ class Game:
         
         self.maze[path_cells[0][path_cell_indices[:n_food_cells]], path_cells[1][path_cell_indices[:n_food_cells]]] = FOOD
     
-    def solve(self, algorithm):
-        if algorithm == 'bfs':
-            handler = Algorithm(self.maze, self.pacman_coor, self.flags, self.mask, self.adj_matrix)
-            path = handler.bfs()
-            
-            for coor in path:
-                print(coor)
+    def solve(self):
+        handler = Handler(self.maze, self.pacman_coor, self.game_params.algorithm, self.game_params.heuristic)
+        path = handler.solve()
+        
+        print(path)
                 
     def __str__(self):
         print(f'>> Pacman coor: {self.pacman_coor}')

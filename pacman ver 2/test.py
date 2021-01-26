@@ -2,11 +2,12 @@ from modules.settings import GameParameters
 from modules.game import Game
 
 game_params = GameParameters(
-    'data/mazes/0.txt',
+    'data/mazes/1.txt',
     'bfs',
-    'Manhattan',
-    1, .3
+    '',
+    1, .7
 )
 
 game = Game(game_params)
+game.solve()
 print(game)
