@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QApplication, QMainWindow, QShortcut
 from modules.ui import Ui_MainWindow
 from modules.settings import WindowSettings, GameParameters
 from modules.game import Game
+from modules.game_app import GameApp
 # from modules.parameters import GameParameters
 # from modules.utility_functions import load_qpixmap
 # from modules.game_app import GameApp
@@ -61,7 +62,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.pacman_speed_value_changed)
 
         '''Settings for label used to display maze'''
-        self.box_maze.setPixmap(QPixmap(self.windowSt.mazes[0]['path']))
+        self.img_maze = QPixmap(self.windowSt.mazes[0]['path'])
+        self.box_maze.setPixmap(self.img_maze)
 
         '''Settings for button run'''
         self.btn_run.clicked.connect(self.btn_run_clicked)
@@ -76,7 +78,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setFixedHeight(self.windowSt.height)
 
     def cb_mazes_index_changed(self, idx):
-        self.box_maze.setPixmap(QPixmap(self.windowSt.mazes[idx]['path']))
+        self.img_maze = QPixmap(self.windowSt.mazes[idx]['path'])
+        self.box_maze.setPixmap(self.img_maze)
 
     def cb_algorithms_index_changed(self, idx):
         if self.windowSt.algorithms[idx]['heuristic']:
@@ -105,16 +108,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         game_params = GameParameters(
             maze, algorithm, heuristic, pacman_speed, feed_density)
         game = Game(game_params)
-        # game = Game(self.game_params)
-        # board = game.board
-        # feed_pos = game.feed_pos
-        # pacman_pos = game.pacman_pos
-        # maze_img = self.game_params.maze_img
-        # maze_width = self.game_params.maze_width
-        # maze_height = self.game_params.maze_height
-        # pacman_speed = self.game_params.pacman_speed
+        # path = game.solve()
+        path = []
+        game_app = GameApp(
+            game.maze,
+            self.windowSt.mazes[self.cb_mazes.currentIndex()]['path'],
+            path,
+            pacman_speed,
+            f"{self.windowSt.algorithms[self.cb_algorithms.currentIndex()]['title']},{heuristic}",
+            self.windowSt.icon,
+            self.windowSt.title,
+            self.img_maze.rect().width(), self.img_maze.rect().height())
+        game_app.run()
 
-        # if self.game_params.algorithm == 'bfs':
-        #     path = game.bfs()
-        #     game_app = GameApp(board, feed_pos, pacman_pos, pacman_speed, path, maze_img, maze_width, maze_height, self.algo_title + ',' + self.hue_title)
-        #     game_app.run()

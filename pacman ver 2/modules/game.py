@@ -40,9 +40,7 @@ class Game:
     
     def solve(self):
         handler = Handler(self.maze, self.pacman_coor, self.game_params.algorithm, self.game_params.heuristic)
-        path = handler.solve()
-        
-        print(path)
+        return handler.solve()
                 
     def __str__(self):
         print(f'>> Pacman coor: {self.pacman_coor}')

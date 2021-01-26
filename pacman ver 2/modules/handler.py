@@ -32,7 +32,7 @@ class Handler:
         return None
     
     def getPath(self, lst_paths):
-        res = [self.pacman_coor.get()]
+        res = [self.pacman_coor]
         
         for path in lst_paths:
             res += path[1:]
@@ -42,7 +42,7 @@ class Handler:
     def updateMaze(self, maze, source, path):
         maze[source.get()] = PATH
         for coor in path:
-            maze[coor] = PATH
+            maze[coor.get()] = PATH
             
     def solve(self):
         maze = self.maze.copy()
