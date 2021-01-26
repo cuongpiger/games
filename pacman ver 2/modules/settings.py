@@ -3,9 +3,8 @@ from modules.util_functions import readJson
 CELL = 30
 WALL = 0
 PATH = 1
-FLAG = 2
-FOOD = 3
-PACMAN = 4
+FOOD = 2
+PACMAN = 3
 
 class WindowSettings:
     def __init__(self):

@@ -5,7 +5,8 @@ game_params = GameParameters(
     'data/mazes/0.txt',
     'bfs',
     'Manhattan',
-    1, 0.01
+    1, .3
 )
 
 game = Game(game_params)
+print(game)
