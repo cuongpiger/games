@@ -5,7 +5,7 @@ WALL = 0
 PATH = 1
 FLAG = 2
 FOOD = 3
-
+PACMAN = 4
 
 class WindowSettings:
     def __init__(self):
