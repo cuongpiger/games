@@ -21,11 +21,16 @@ def checkEvents(state, pacman):
             
     return flag
 
-def screenDraw(screen, width, height, background, pacman, food, group_food):
+def screenDraw(screen, width, height, background, pacman, food, group_food, target):
     screen.fill(colorSt.GREY)
     screen.blit(background, (CELL, CELL))
+    pacman.update(target)
+    updateFood(pacman, group_food)
     group_food.draw(screen)
-    pacman.blit(90)
+    pacman.draw((target - pacman.coor).getAngle())
+    
+    return pacman.checkMove(target)
+    
 
 
 def introDraw(screen, title, width, height):
@@ -44,7 +49,7 @@ def introDraw(screen, title, width, height):
     drawText(screen, 'push SPACE BAR to START', fontSt.FONT_ARIAL_BLACK,
               fontSt.SIZE_20, colorSt.DARK_BLUE, Coor(width//2, height//2 + 20))
     
-def foodDraw(screen, food, group_food, img_food):
+def initFood(screen, food, group_food, img_food):
     for coor in food:
         f = Food(screen, coor.swap(), img_food)
         group_food.add(f)
@@ -54,10 +59,12 @@ def foodDraw(screen, food, group_food, img_food):
 
 def checkKeydownEvents(state, event):
     if event.key == pygame.K_SPACE:
-        if state <= 0:
-            return 1
+        if state == 0: # the intro is running
+            return -1
+        elif state == -1: # game is running
+            return 1 # pause game
         elif state == 1: # game is running
-            return 0 # pause game
+            return -1
 
 def drawText(screen, content, font_name, size, color, coor, align='center'):
     font = pygame.font.SysFont(font_name, size)
@@ -69,7 +76,10 @@ def drawText(screen, content, font_name, size, color, coor, align='center'):
 
     screen.blit(text, coor.get())
     
-def updateFood(screen, food, group_food):
-    pass
+def updateFood(pacman, group_food):
+    rm_food = pygame.sprite.spritecollideany(pacman, group_food)
+    
+    if rm_food:
+        group_food.remove(rm_food)
     
         

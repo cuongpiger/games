@@ -108,8 +108,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         game_params = GameParameters(
             maze, algorithm, heuristic, pacman_speed, feed_density)
         game = Game(game_params)
-        # path = game.solve()
-        path = []
+        path = game.solve()
+        # path = []
         game_app = GameApp(
             game.maze,
             self.windowSt.mazes[self.cb_mazes.currentIndex()]['path'],

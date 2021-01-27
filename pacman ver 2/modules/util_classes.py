@@ -36,7 +36,10 @@ class Coor:
         if self.x == 0:
             return 0 if self.y > 0 else 180
         else:
-            return 270 if self.x > 0 else 90        
+            return 270 if self.x > 0 else 90   
+        
+    def __sub__(self, other):
+        return Coor(self.x - other.x, self.y - other.y)     
     
     def __lt__(self, other):
         if self.x < 0 or self.y < 0 or self.x >= other[0] or self.y >= other[1]:
@@ -60,12 +63,15 @@ class Location:
 
     def __eq__(self, other):
         return (int(self.x) == int(other.x)) and (int(self.y) == int(other.y))
+    
+    def get(self):
+        return (self.x, self.y)
+    
+    def set(self, x, y):
+        self.x, self.y = x, y
 
     def move(self, coor, speed):
-        if coor.x != 0:
-            return Location(self.x + float(coor.x)*speed, self.y)
-        else:
-            return Location(self.x, self.y + float(coor.y)*speed)
+        return Location(self.x + float(coor.x)*speed, self.y + float(coor.y)*speed)
 
     def swap(self):
         return Location(self.y, self.x)

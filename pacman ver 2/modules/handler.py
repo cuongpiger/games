@@ -47,16 +47,18 @@ class Handler:
     def solve(self):
         maze = self.maze.copy()
         source = self.pacman_coor
-        target = self.findClosestFood(maze, source)
         lst_paths = []
         
         if not self.heuristic:
-            while target is not None:
-                path = getattr(Algorithm(maze, source, target), self.algorithm)()
-                self.updateMaze(maze, source, path)
-                lst_paths.append(path)
-                source = target
-                target = self.findClosestFood(maze, source)
+            while True:
+                res = getattr(Algorithm(maze, source), self.algorithm)()
+                
+                if res is None:
+                    break
+                
+                self.updateMaze(maze, source, res[0])
+                lst_paths.append(res[0])
+                source = res[1]
                 
         return self.getPath(lst_paths)
         

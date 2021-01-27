@@ -5,9 +5,12 @@ game_params = GameParameters(
     'data/mazes/1.txt',
     'bfs',
     '',
-    1, .7
+    1, .01
 )
 
 game = Game(game_params)
-game.solve()
+path = game.solve()
 print(game)
+
+for coor in path:
+    print(coor.get())

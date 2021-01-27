@@ -1,16 +1,15 @@
 import numpy as np
 from queue import Queue
-from modules.settings import PATH, WALL
+from modules.settings import PATH, WALL, FOOD
 from modules.util_classes import Coor
 
 class Algorithm:
-    def __init__(self, maze, source, target):
+    def __init__(self, maze, source):
         self.maze = maze.copy()
         self.source = source
-        self.target = target
         
-    def getPath(self, visited):
-        coor = self.target
+    def getPath(self, visited, food):
+        coor = food
         path = []
         
         while coor.get() != (-1, -1):
@@ -27,8 +26,8 @@ class Algorithm:
         while not queue.empty():
             u = queue.get()
             
-            if u == self.target:
-                return self.getPath(visited)
+            if self.maze[u.get()] == FOOD:
+                return (self.getPath(visited, u), u)
             
             for direc in range(4):
                 v = u.move(direc)
@@ -36,4 +35,6 @@ class Algorithm:
                 if v < self.maze.shape and self.maze[v.get()] != WALL and visited.get(v.get()) is None:
                     queue.put(v)
                     visited[v.get()] = u
+                    
+        return None
                     

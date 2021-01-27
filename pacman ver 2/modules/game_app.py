@@ -17,28 +17,38 @@ class GameApp:
         self.width = width + 2*CELL
         self.height = height + 2*CELL
         self.screen = pygame.display.set_mode((self.width, self.height))
-        self.pacman = Pacman(self.screen, [Coor(x, y) for x, y in zip(*np.where(maze == PACMAN))][0].swap(), pacman_speed)
+        self.pacman = Pacman(self.screen, path[0], pacman_speed)
         self.algorithm = algorithm 
-        self.state = -1
+        self.state = 0
         self.group_food = Group()
         self.img_food = IMG_FOOD
         
         pygame.display.set_icon(pygame.image.load(icon))
         pygame.display.set_caption(title)
         
+        for coor in path:
+            print(coor)
+            
+        print()
+        
     def run(self):
+        i = 1
         pygame.init()
         pygame.time.set_timer(pygame.USEREVENT + 1, 333)
         
-        gf.foodDraw(self.screen, self.food, self.group_food, self.img_food)
+        gf.initFood(self.screen, self.food, self.group_food, self.img_food)
         
         while True:
             self.state = gf.checkEvents(self.state, self.pacman)
             
-            if self.state == -1: # intro is running, waiting to push space to start game
+            if self.state == 0: # intro is running, waiting to push space to start game
                 gf.introDraw(self.screen, self.algorithm, self.width, self.height)
+                # gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, self.food, self.group_food, self.path[i])
             elif self.state == 1: # game is running
-                gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, self.food, self.group_food)
+                i += gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, self.food, self.group_food, self.path[i])
+            
+                if i == len(self.path):
+                    self.state = -1 # pause game
             elif self.state == 2:
                 break
                 
