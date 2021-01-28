@@ -59,7 +59,7 @@ class GameApp:
                 if i == len(self.path):
                     self.state = -1 # pause game
             elif self.state == 3:
-                gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, None, self.food, self.group_food, self.group_trace, maze, self.path[i], 0, len(self.path) - 1, False)
+                gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, None, self.food, self.group_food, self.group_trace, maze, self.pacman.coor, 0, len(self.path) - 1, False)
                 self.state = -1
             elif self.state == 4: # quit game
                 self.state = 0
