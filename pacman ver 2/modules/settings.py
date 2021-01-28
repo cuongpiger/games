@@ -5,10 +5,16 @@ WALL = 0
 PATH = 1
 FOOD = 2
 PACMAN = 3
+TRACE = ((253, 235, 238), (250, 205, 210), (239, 154, 155), (229, 115, 115), (239,
+                                                                              83, 80), (243, 67, 54), (229, 57, 53), (211, 47, 47), (198, 40, 40), (183, 28, 28))
 
-IMG_FOOD = pygame.transform.scale(pygame.image.load(r'data/images/food.png'), (CELL, CELL))
+IMG_FLAG = pygame.transform.scale(
+    pygame.image.load(r'data/images/flag.png'), (CELL, CELL))
+IMG_FOOD = pygame.transform.scale(
+    pygame.image.load(r'data/images/food.png'), (CELL, CELL))
 IMG_PACMAN = [
-    pygame.transform.scale(pygame.image.load(r'data/images/pacman_close.png'), (CELL, CELL)), 
+    pygame.transform.scale(pygame.image.load(
+        r'data/images/pacman_close.png'), (CELL, CELL)),
     pygame.transform.scale(pygame.image.load(r'data/images/pacman_open.png'), (CELL, CELL))]
 
 

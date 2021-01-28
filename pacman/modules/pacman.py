@@ -15,7 +15,7 @@ class Pacman(Sprite):
         self.image = gameSt.pacman_img
         self.rect = self.image[0].get_rect()
         self.mouth_closed = False
-        self.pacman_pos = pacman_pos.swap()
+        self.pacman_pos = pacman_pos.swap() # original
 
         self.rect.x = (pacman_pos.x * gameSt.cell) + gameSt.cell
         self.rect.y = (pacman_pos.y * gameSt.cell) + gameSt.cell
@@ -41,7 +41,7 @@ class Pacman(Sprite):
     def check_move(self, direc_pos):
         new_pacman_pos = (self.pacman_pos + direc_pos).swap()
         future_location = Location(new_pacman_pos.x*gameSt.cell + gameSt.cell, new_pacman_pos.y*gameSt.cell + gameSt.cell)
-
+        print('ok')
         if self.check_move_hit(new_pacman_pos.swap(), direc_pos):
             self.pacman_pos = new_pacman_pos.swap()
             return True

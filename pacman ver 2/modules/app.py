@@ -114,6 +114,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             game.maze,
             self.windowSt.mazes[self.cb_mazes.currentIndex()]['path'],
             path,
+            self.chb_path.isChecked(),
             pacman_speed,
             f"{self.windowSt.algorithms[self.cb_algorithms.currentIndex()]['title']},{heuristic}",
             self.windowSt.icon,

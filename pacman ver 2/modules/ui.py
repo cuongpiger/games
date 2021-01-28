@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainwindow.ui'
+# Form generated from reading UI file 'mainwindow.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.1
+# Created by: Qt User Interface Compiler version 5.15.1
 ##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide2.QtCore import *
@@ -23,29 +23,36 @@ class Ui_MainWindow(object):
         self.box_maze = QLabel(self.centralwidget)
         self.box_maze.setObjectName(u"box_maze")
         self.box_maze.setGeometry(QRect(330, 20, 461, 291))
-        self.box_maze.setPixmap(QPixmap(u"C:/Users/cuong/Google Drive/blackpink-rose-chia-se-suy-nghi-ve-giong-hat-cua-chinh-ban-than-1-1603332638.jpg"))
+        self.box_maze.setPixmap(QPixmap(
+            u"C:/Users/cuong/Google Drive/blackpink-rose-chia-se-suy-nghi-ve-giong-hat-cua-chinh-ban-than-1-1603332638.jpg"))
         self.box_maze.setScaledContents(True)
         self.cb_mazes = QComboBox(self.centralwidget)
         self.cb_mazes.setObjectName(u"cb_mazes")
-        self.cb_mazes.setGeometry(QRect(110, 20, 191, 22))
+        self.cb_mazes.setGeometry(QRect(110, 20, 80, 22))  # 191
         self.label_2 = QLabel(self.centralwidget)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(20, 20, 47, 21))
+        self.label_path = QLabel(self.centralwidget)
+        self.label_path.setGeometry(QRect(200, 20, 75, 21))
+        self.chb_path = QCheckBox(self.centralwidget)
+        self.chb_path.setObjectName(u"chb_path")
+        self.chb_path.setCheckState(Qt.Checked)
+        self.chb_path.setGeometry(QRect(287, 20, 23, 23))
         self.label_3 = QLabel(self.centralwidget)
         self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(20, 70, 47, 21))
+        self.label_3.setGeometry(QRect(20, 70, 80, 21))
         self.cb_algorithms = QComboBox(self.centralwidget)
         self.cb_algorithms.setObjectName(u"cb_algorithms")
         self.cb_algorithms.setGeometry(QRect(110, 70, 191, 22))
         self.label_4 = QLabel(self.centralwidget)
         self.label_4.setObjectName(u"label_4")
-        self.label_4.setGeometry(QRect(20, 120, 47, 21))
+        self.label_4.setGeometry(QRect(20, 120, 70, 21))
         self.cb_heuristic = QComboBox(self.centralwidget)
         self.cb_heuristic.setObjectName(u"cb_heuristic")
         self.cb_heuristic.setGeometry(QRect(110, 120, 191, 22))
         self.label_5 = QLabel(self.centralwidget)
         self.label_5.setObjectName(u"label_5")
-        self.label_5.setGeometry(QRect(20, 170, 71, 21))
+        self.label_5.setGeometry(QRect(20, 170, 90, 21))
         self.sld_feed_density = QSlider(self.centralwidget)
         self.sld_feed_density.setObjectName(u"sld_feed_density")
         self.sld_feed_density.setGeometry(QRect(110, 170, 141, 22))
@@ -59,6 +66,9 @@ class Ui_MainWindow(object):
         self.sld_pacman_speed.setOrientation(Qt.Horizontal)
         self.btn_run = QPushButton(self.centralwidget)
         self.btn_run.setObjectName(u"btn_run")
+        self.btn_run.setIcon(QIcon(r'data/images/play-button.png'))
+        self.btn_run.setStyleSheet(
+            'QPushButton{background-color: green; font-size: 20px; font-weight: bold; color: white} QPushButton:hover{background-color: darkgreen}')
         self.btn_run.setGeometry(QRect(100, 270, 131, 41))
         self.sb_feed_density = QSpinBox(self.centralwidget)
         self.sb_feed_density.setObjectName(u"sb_feed_density")
@@ -81,13 +91,21 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate(
+            "MainWindow", u"MainWindow", None))
         self.box_maze.setText("")
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Maze:", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Algorithm:", None))
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Heuristic:", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"Feed density:", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"Pacman's speed:", None))
-        self.btn_run.setText(QCoreApplication.translate("MainWindow", u"RUN", None))
+        self.label_path.setText(QCoreApplication.translate(
+            "MainWindow", u"Show path:", None))
+        self.label_2.setText(QCoreApplication.translate(
+            "MainWindow", u"Maze:", None))
+        self.label_3.setText(QCoreApplication.translate(
+            "MainWindow", u"Algorithm:", None))
+        self.label_4.setText(QCoreApplication.translate(
+            "MainWindow", u"Heuristic:", None))
+        self.label_5.setText(QCoreApplication.translate(
+            "MainWindow", u"Feed density:", None))
+        self.label_6.setText(QCoreApplication.translate(
+            "MainWindow", u"Speed:", None))
+        self.btn_run.setText(QCoreApplication.translate(
+            "MainWindow", u" RUN", None))
     # retranslateUi
-
