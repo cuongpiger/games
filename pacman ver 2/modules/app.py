@@ -8,9 +8,6 @@ from modules.ui import Ui_MainWindow
 from modules.settings import WindowSettings, GameParameters
 from modules.game import Game
 from modules.game_app import GameApp
-# from modules.parameters import GameParameters
-# from modules.utility_functions import load_qpixmap
-# from modules.game_app import GameApp
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -121,4 +118,3 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.windowSt.title,
             self.img_maze.rect().width(), self.img_maze.rect().height())
         game_app.run()
-

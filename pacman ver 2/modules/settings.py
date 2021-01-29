@@ -28,7 +28,7 @@ class WindowSettings:
         self.mazes = readJson(r'data/json/mazes.json')
         self.algorithms = readJson(r'data/json/algorithms.json')
         self.feed_density = (0.01, 1.)
-        self.pacman_speed = (1, 7)
+        self.pacman_speed = (1, 6)
 
 
 class GameParameters:

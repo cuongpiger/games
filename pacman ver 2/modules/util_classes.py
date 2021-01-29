@@ -1,4 +1,5 @@
 from modules.settings import WALL
+import math
 
 class Coor:
     def __init__(self, x, y):
@@ -23,7 +24,10 @@ class Coor:
 
         return Coor(self.x, self.y - 1)  # left
 
-    def euclid(self, other):
+    def Euclidean(self, other):
+        return math.sqrt(float((self.x - other.x)**2 + (self.y - other.y)**2))
+    
+    def Manhattan(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)
     
     def copy(self):

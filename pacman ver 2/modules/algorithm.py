@@ -1,6 +1,6 @@
 import numpy as np
-from queue import Queue, LifoQueue
-from modules.settings import PATH, WALL, FOOD
+from queue import Queue, LifoQueue, PriorityQueue
+from modules.settings import WALL, FOOD
 from modules.util_classes import Coor
 
 class Algorithm:
@@ -18,7 +18,7 @@ class Algorithm:
             
         return path[::-1]
 
-    def bfs(self):
+    def bfs(self, heuristic=None):
         queue = Queue()
         queue.put(self.source)
         visited = {self.source.get(): Coor(-1, -1)}
@@ -38,7 +38,7 @@ class Algorithm:
                     
         return None
     
-    def dfs(self):
+    def dfs(self, heuristic=None):
         stack = LifoQueue()
         stack.put(self.source)
         visited = {self.source.get(): Coor(-1, -1)}
@@ -65,4 +65,56 @@ class Algorithm:
                     
         return None                
                 
+    def dijkstra(self, heuristic=None):
+        pqueue = PriorityQueue()
+        pqueue.put((0, self.source.get()))
+        dist = np.full(self.maze.shape, np.inf)
+        dist[self.source.get()] = 0.
+        visited = {self.source.get(): Coor(-1, -1)}
+        
+        while not pqueue.empty():
+            w, u = pqueue.get()
+            u = Coor(u[0], u[1])
+            
+            if self.maze[u.get()] == FOOD:
+                return (self.getPath(visited, u), u)
+            
+            for direc in range(4):
+                v = u.move(direc)
+                
+                if v < self.maze.shape and self.maze[v.get()] != WALL and w + 1 < dist[v.get()]:
+                    dist[v.get()] = w + 1
+                    visited[v.get()] = u
+                    pqueue.put((w + 1, v.get()))
                     
+        return None
+        
+    def astar(self, heuristic):
+        pqueue = PriorityQueue()
+        pqueue.put((0, 0, self.source.get()))
+        dist = np.full(self.maze.shape, np.inf)
+        dist[self.source.get()] = 0
+        visited = {self.source.get(): Coor(-1, -1)}
+        mask = np.where(self.maze == FOOD)
+        
+        if not len(mask[0]):
+            return None
+        
+        i = np.random.randint(len(mask[0]))
+        target = Coor(mask[0][i], mask[1][i])
+        
+        while not pqueue.empty():
+            f, d, u = pqueue.get()
+            u = Coor(u[0], u[1])
+            
+            if u == target:
+                return (self.getPath(visited, u), u)
+            
+            for direc in range(4):
+                calcDist = getattr(u, heuristic)
+                new_d = d + 1
+                new_h = calcDist(target)
+                new_f = new_d + new_h
+                
+                
+        
