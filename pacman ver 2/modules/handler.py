@@ -28,15 +28,15 @@ class Handler:
         source = self.pacman_coor
         lst_paths = []
 
-        if not self.heuristic:
-            while True:
-                res = getattr(Algorithm(maze, source), self.algorithm)()
+        # if not self.heuristic:
+        while True:
+            res = getattr(Algorithm(maze, source), self.algorithm)(self.heuristic)
 
-                if res is None:
-                    break
+            if res is None:
+                break
 
-                self.updateMaze(maze, source, res[0])
-                lst_paths.append(res[0])
-                source = res[1]
+            self.updateMaze(maze, source, res[0])
+            lst_paths.append(res[0])
+            source = res[1]
 
         return self.getPath(lst_paths)

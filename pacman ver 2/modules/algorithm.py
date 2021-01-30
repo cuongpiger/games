@@ -63,7 +63,7 @@ class Algorithm:
                     stack.put(v)
                     visited[v.get()] = u
                     
-        return None                
+        return None
                 
     def dijkstra(self, heuristic=None):
         pqueue = PriorityQueue()
@@ -89,7 +89,7 @@ class Algorithm:
                     
         return None
         
-    def astar(self, heuristic):
+    def aStar(self, heuristic):
         pqueue = PriorityQueue()
         pqueue.put((0, 0, self.source.get()))
         dist = np.full(self.maze.shape, np.inf)
@@ -111,10 +111,14 @@ class Algorithm:
                 return (self.getPath(visited, u), u)
             
             for direc in range(4):
-                calcDist = getattr(u, heuristic)
+                v = u.move(direc)
+                calcDist = getattr(v, heuristic)
+                
                 new_d = d + 1
                 new_h = calcDist(target)
                 new_f = new_d + new_h
                 
-                
-        
+                if v < self.maze.shape and self.maze[v.get()] != WALL and new_f < dist[v.get()]:
+                    visited[v.get()] = u
+                    dist[v.get()] = new_f
+                    pqueue.put((new_f, new_d, v.get()))

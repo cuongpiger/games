@@ -2,5 +2,5 @@
   { "title": "Breadth First Search", "name": "bfs", "heuristic": [] },
   { "title": "Depth First Search", "name": "dfs", "heuristic": [] },
   { "title": "Dijkstra", "name": "dijkstra", "heuristic": [] },
-  { "title": "A-Star", "name": "astar", "heuristic": ["Manhattan", "Euclidean"] }
+  { "title": "A-Star", "name": "aStar", "heuristic": ["Manhattan", "Euclidean"] }
 ]
