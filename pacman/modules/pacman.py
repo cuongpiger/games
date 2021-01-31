@@ -1,67 +1,60 @@
 import pygame
 from pygame.sprite import Sprite
-from modules.settings import GameSettings, WindowSettings
-from modules.utility_classes import Pos, Location
-
-
-gameSt = GameSettings()
+from modules.settings import IMG_PACMAN, CELL
+from modules.util_classes import Coor, Location
 
 
 class Pacman(Sprite):
-    def __init__(self, screen, pacman_pos):
+    def __init__(self, screen, coor, pacman_speed):
         super().__init__()
 
         self.screen = screen
-        self.image = gameSt.pacman_img
+        self.image = IMG_PACMAN
         self.rect = self.image[0].get_rect()
         self.mouth_closed = False
-        self.pacman_pos = pacman_pos.swap() # original
-
-        self.rect.x = (pacman_pos.x * gameSt.cell) + gameSt.cell
-        self.rect.y = (pacman_pos.y * gameSt.cell) + gameSt.cell
-
+        self.coor = coor
+        self.rect.x = (coor.x * CELL) + CELL
+        self.rect.y = (coor.y * CELL) + CELL
         self.location = Location(self.rect.x, self.rect.y)
+        self.speed = pacman_speed
 
-    def toggle_mouth(self):
+    def toggleMouth(self):
         self.mouth_closed = not self.mouth_closed
 
-    def rotate(self, img_id, angel):
-        return pygame.transform.rotate(self.image[img_id], angel)
+    def rotate(self, angel):
+        return pygame.transform.rotate(self.image[int(self.mouth_closed)], angel)
 
-    def blit(self, angel):
-        if self.mouth_closed:
-            self.screen.blit(self.rotate(0, angel), self.rect)
-        else:
-            self.screen.blit(self.rotate(1, angel), self.rect)
+    def draw(self, angel):
+        self.screen.blit(self.rotate(angel), self.rect)
 
-    def update(self, direc_pos, speed):
-        self.location = self.location.move(direc_pos.swap(), speed)
-        self.rect.x, self.rect.y = self.location.x, self.location.y
+    def update(self, target_coor):
+        self.location = self.location.move(
+            (target_coor - self.coor), self.speed)
+        self.rect.y, self.rect.x = self.location.get()
 
-    def check_move(self, direc_pos):
-        new_pacman_pos = (self.pacman_pos + direc_pos).swap()
-        future_location = Location(new_pacman_pos.x*gameSt.cell + gameSt.cell, new_pacman_pos.y*gameSt.cell + gameSt.cell)
-        print('ok')
-        if self.check_move_hit(new_pacman_pos.swap(), direc_pos):
-            self.pacman_pos = new_pacman_pos.swap()
+    def checkMove(self, target_coor):
+        if self.checkMoveHit(target_coor):
+            self.coor = target_coor
             return True
 
         return False
 
-    def check_move_hit(self, new_pacman_pos, direc_pos):
-        hor_bar = new_pacman_pos.x*gameSt.cell + gameSt.cell
-        ver_bar = new_pacman_pos.y*gameSt.cell + gameSt.cell
+    def checkMoveHit(self, target_coor):
+        direc = target_coor - self.coor
+        hor_bar = target_coor.x * CELL + CELL
 
-        if direc_pos.x < 0 and self.rect.top <= hor_bar: # go top
+        if direc.x < 0 and self.rect.top <= hor_bar:  # go top
             return True
-        elif direc_pos.x > 0 and self.rect.top >= hor_bar: # go bottom
+
+        if direc.x > 0 and self.rect.top >= hor_bar:  # go down
             return True
-        elif direc_pos.y < 0 and self.rect.left <= ver_bar: # go left
+
+        ver_bar = target_coor.y * CELL + CELL
+
+        if direc.y < 0 and self.rect.left <= ver_bar:
             return True
-        elif direc_pos.y > 0 and self.rect.left >= ver_bar: # go right
+
+        if direc.y > 0 and self.rect.left >= ver_bar:
             return True
 
         return False
-
-            
-

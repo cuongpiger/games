@@ -1,62 +1,71 @@
-import sys
-import pygame
-from pygame.sprite import Group
-from modules.settings import WindowSettings, GameSettings
-from modules.game_stats import GameStats
-from modules.pacman import Pacman
-from modules.feed import Feed
-from modules.utility_classes import Pos
+import sys, pygame
+import numpy as np
 import modules.game_functions as gf
+from pygame.sprite import Group
+from modules.settings import FOOD, CELL, IMG_FOOD, PACMAN
+from modules.util_classes import Coor
+from modules.pacman import Pacman
+from modules.flag import Flag
+from modules.trace import Trace
 
-windowSt = WindowSettings()
 
 class GameApp:
-    def __init__(self, board, feed_pos, pacman_pos, pacman_speed, path, maze_img, maze_width, maze_height, title):
-        self.board = board
-        self.feed_pos = feed_pos
-        self.path = path + [Pos(0, 0)] # cái đường đi của bfs
-        self.background = pygame.transform.scale(pygame.image.load(maze_img), (maze_width, maze_height))
-        self.width = maze_width + 2*windowSt.padding
-        self.height = maze_height + 2*windowSt.padding
-        self.title = title
-        self.stats = GameStats(len(path) - 1)
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.pacman = Pacman(self.screen, pacman_pos.swap())
-        self.speed = pacman_speed
-        self.feed = Group()
+    def __init__(self, maze, img, path, trace, pacman_speed, algorithm, icon, title, width, height):
+        self.maze = maze
+        self.background = pygame.transform.scale(pygame.image.load(img), (width, height))
+        self.path = path
+        self.food = [Coor(x, y) for x, y in zip(*np.where(maze == FOOD))]
         self.clock = pygame.time.Clock()
-
-        pygame.display.set_icon(pygame.image.load(windowSt.icon))
-        pygame.display.set_caption(windowSt.title)
-
-
+        self.width = width + 2*CELL
+        self.height = height + 2*CELL
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.pacman = Pacman(self.screen, path[0], pacman_speed)
+        self.flag = Flag(self.screen, self.pacman.coor.swap())
+        self.algorithm = algorithm 
+        self.state = 0
+        self.group_food = Group()
+        self.group_trace = Group()
+        self.img_food = IMG_FOOD
+        self.trace = trace
+        
+        pygame.display.set_icon(pygame.image.load(icon))
+        pygame.display.set_caption(title)
+        
     def run(self):
+        i = 1
+        maze = np.full(self.maze.shape, -1)
+        maze[self.path[0].get()] += 1
+        
         pygame.init()
         pygame.time.set_timer(pygame.USEREVENT + 1, 333)
-
-        direc_pos = self.path.pop(0)
-        cnt_cost = 0
-
-        gf.feed_draw(self.screen, self.feed, self.feed_pos)
-
+        
+        gf.initFood(self.screen, self.food, self.group_food, self.img_food)
+        
         while True:
-            gf.check_events(self.path, self.pacman, self.stats)
-
-            if self.stats.game_active == 1:
-                flag = gf.screen_draw(self.screen, self.width, self.height, self.background, self.feed, self.pacman, self.speed, direc_pos, cnt_cost, self.stats.cost)
-
-                if flag == True:
-                    direc_pos = self.path.pop(0)
-                    cnt_cost += 1
-            elif self.stats.game_active == -1:
-                gf.intro_draw(self.screen, self.title, self.width, self.height)
-            elif self.stats.game_active == 2:
+            self.state = gf.checkEvents(self.state, self.pacman)
+            
+            if self.state == 0: # intro is running, waiting to push space to start game
+                gf.introDraw(self.screen, self.algorithm, self.width, self.height)
+                self.state = 3
+            elif self.state == 1: # game is running
+                if not len(self.group_trace.sprites()):
+                    self.group_trace.add(Trace(self.screen, self.pacman, maze))
+                
+                self.flag.draw()
+                if gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, self.flag, self.food, self.group_food, self.group_trace, maze, self.path[i], i, len(self.path) - 1, self.trace):
+                    maze[self.path[i].get()] += 1
+                    i += 1
+                
+                if i == len(self.path):
+                    self.state = -1 # pause game
+            elif self.state == 3:
+                gf.screenDraw(self.screen, self.width, self.height, self.background, self.pacman, None, self.food, self.group_food, self.group_trace, maze, self.pacman.coor, 0, len(self.path) - 1, False)
+                self.state = -1
+            elif self.state == 4: # quit game
+                self.state = 0
                 break
-
-            if not self.path:
-                self.stats.game_active = 0
-
+                
             pygame.display.flip()
             self.clock.tick(60)
-
+            
         pygame.quit()
